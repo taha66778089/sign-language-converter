@@ -13,7 +13,6 @@ body {
     overflow-x:hidden;
 }
 
-/* النص المتحرك وملون أعلى الصفحة */
 #marquee {
     font-size:36px;
     font-weight:bold;
@@ -28,23 +27,12 @@ body {
     margin:10px 0;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
-
-@keyframes marqueeMove {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
-
-@keyframes rainbow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+@keyframes marqueeMove {0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
+@keyframes rainbow {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
 header { position: relative; padding: 50px 0 20px 0; }
-
 #datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px; color:white; }
 
-/* الحاوية الرئيسية */
 .container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap;}
 input[type="file"] { margin:20px 0; padding:10px; }
 button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer; transition:0.3s;}
@@ -58,7 +46,6 @@ button:hover { background-color:#1565c0; }
 @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
 @keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-10%);} }
 
-/* نص متحرك أسفل الصفحة */
 #footerMarquee {
     font-size:48px;
     font-weight:bold;
@@ -76,8 +63,6 @@ button:hover { background-color:#1565c0; }
     text-align:center;
     padding:10px 0;
 }
-
-/* تحسين الرؤية للنصوص */
 #marquee, #footerMarquee { text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
 </style>
 </head>
@@ -109,13 +94,15 @@ button:hover { background-color:#1565c0; }
 <h3>الناتج:</h3>
 <p>سيظهر النص هنا بعد التحويل...</p>
 </div>
+
 </div>
 </div>
 
-<!-- نص متحرك أسفل الصفحة -->
 <div id="footerMarquee">مجمع التربية السمعية للبنات</div>
 
 <script>
+let currentText = {ar:'', en:''};
+
 function updateDateTime(){
     const now = new Date();
     document.getElementById('datetime').textContent = now.toLocaleString('ar-EG');
@@ -126,15 +113,14 @@ function previewVideo(){
     const videoInput = document.getElementById('videoInput');
     const videoPlayer = document.getElementById('videoPlayer');
     const welcomeBox = document.getElementById('welcomeBox');
-
     if(videoInput.files && videoInput.files[0]){
         const file = videoInput.files[0];
         const url = URL.createObjectURL(file);
         videoPlayer.src = url; videoPlayer.style.display='block';
         videoPlayer.play();
-        alert("تم تحميل الفيديو بنجاح");
         welcomeBox.style.display='none';
         document.getElementById('output').innerHTML='<h3>الناتج:</h3><p>سيظهر النص هنا بعد التحويل...</p>';
+        currentText = {ar:'', en:''};
     }
 }
 
@@ -145,7 +131,6 @@ function convertVideo(){
     const welcomeTextEn = document.getElementById('welcomeTextEn');
     const logoImg = document.getElementById('logoImg');
     const file = document.getElementById('videoInput').files[0];
-
     if(!file){ alert("من فضلك اختر فيديو أولاً"); return; }
 
     let text="", textEn="", welcomeMessage="", welcomeMessageEn="", bgColor="", logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
@@ -179,6 +164,9 @@ function convertVideo(){
         bgColor="#9e9e9e"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
     }
 
+    currentText.ar = text;
+    currentText.en = textEn;
+
     welcomeBox.style.display="flex";
     welcomeBox.style.backgroundColor = bgColor;
     welcomeText.textContent = welcomeMessage;
@@ -189,13 +177,22 @@ function convertVideo(){
     <p style="font-size:18px;font-weight:bold;">${text}</p>
     <p style="font-size:16px;color:gray;">${textEn}</p>`;
 
-    speakText(text);
+    // تشغيل الصوت تلقائياً
+    speakText('ar'); // العربية أولاً
+    setTimeout(()=> speakText('en'), 3000); // الإنجليزية بعد 3 ثواني
 }
 
-function speakText(text){
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang="ar-SA";
-    speechSynthesis.speak(utterance);
+function speakText(lang){
+    let utterance = null;
+    if(lang === 'ar' && currentText.ar){
+        utterance = new SpeechSynthesisUtterance(currentText.ar);
+        utterance.lang = "ar-QA"; // صوت عربي رجل قطرى
+    }
+    else if(lang === 'en' && currentText.en){
+        utterance = new SpeechSynthesisUtterance(currentText.en);
+        utterance.lang = "en-US";
+    }
+    if(utterance) speechSynthesis.speak(utterance);
 }
 </script>
 </body>
