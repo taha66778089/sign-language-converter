@@ -26,6 +26,7 @@ body {
     background-size: 300%;
     animation: marqueeMove 15s linear infinite, rainbow 5s linear infinite;
     margin:10px 0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 @keyframes marqueeMove {
@@ -41,29 +42,55 @@ body {
 
 header { position: relative; padding: 50px 0 20px 0; }
 
-#datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px; }
+#datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px; color:white; }
 
-/* الصور الجانبية */
-.side-img { position:fixed; top:50%; transform:translateY(-50%); width:120px; animation:bounce 2s infinite; }
-.left-img { left:0; } .right-img { right:0; }
-@keyframes bounce {0%,100%{transform:translateY(-50%);}50%{transform:translateY(-60%);} }
+/* الصور الجانبية مع تأثير التمرير */
+.side-img { position:fixed; width:120px; transition: transform 0.3s; }
+.left-img { left:0; top:50%; transform:translateY(-50%);}
+.right-img { right:0; top:50%; transform:translateY(-50%); }
 
-.container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center;}
+/* الحاوية الرئيسية */
+.container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap;}
 input[type="file"] { margin:20px 0; padding:10px; }
-button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer;}
+button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer; transition:0.3s;}
+button:hover { background-color:#1565c0; }
+
 .output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px;}
 .welcome-box { margin-top:20px; padding:15px; border-radius:10px; display:flex; align-items:center; justify-content:center; gap:15px; animation:fadeIn 1s ease-in-out; color:white;}
 .welcome-box img { width:60px; height:60px; animation:bounce 1s infinite; }
 .welcome-text { font-weight:bold; font-size:16px;}
 .welcome-text-en { font-size:14px; color: #f0f0f0; }
 @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+@keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-10%);} }
+
+/* نص متحرك أسفل الصفحة */
+#footerMarquee {
+    font-size:48px;
+    font-weight:bold;
+    white-space: nowrap;
+    overflow:hidden;
+    display:block;
+    color: transparent;
+    background: linear-gradient(45deg, #ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
+    -webkit-background-clip: text;
+    background-size: 300%;
+    animation: marqueeMove 20s linear infinite, rainbow 5s linear infinite;
+    position:fixed;
+    bottom:0;
+    width:100%;
+    text-align:center;
+    padding:10px 0;
+}
+
+/* تحسين الرؤية للنصوص */
+#marquee, #footerMarquee { text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
 </style>
 </head>
 <body>
 
 <!-- الصور الجانبية -->
-<img src="https://i.postimg.cc/7Z9P5M2Q/sign-left.png" class="side-img left-img" alt="إعاقة سمعية">
-<img src="https://i.postimg.cc/wx9v8sR1/sign-right.png" class="side-img right-img" alt="لغة إشارة">
+<img src="https://qatareducation-my.sharepoint.com/:i:/g/personal/t_wahib1802_education_qa/IQBSxYRgbjWLTq9qbBwcp4HRAYdP73zk94MY0n3tZHaBXsA?e=Dbpe1D" class="side-img left-img" alt="لغة إشارة">
+<img src="https://qatareducation-my.sharepoint.com/:i:/g/personal/t_wahib1802_education_qa/IQBSxYRgbjWLTq9qbBwcp4HRAYdP73zk94MY0n3tZHaBXsA?e=Dbpe1D" class="side-img right-img" alt="لغة إشارة">
 
 <header>
 <div id="datetime"></div>
@@ -94,6 +121,9 @@ button { background-color:#1976d2; color:white; border:none; padding:15px 40px; 
 </div>
 </div>
 
+<!-- نص متحرك أسفل الصفحة -->
+<div id="footerMarquee">مجمع التربية السمعية للبنات</div>
+
 <script>
 function updateDateTime(){
     const now = new Date();
@@ -112,11 +142,17 @@ function previewVideo(){
         videoPlayer.src = url; videoPlayer.style.display='block';
         videoPlayer.play();
         alert("تم تحميل الفيديو بنجاح");
-        // اخفاء الرسائل القديمة عند رفع فيديو جديد
         welcomeBox.style.display='none';
         document.getElementById('output').innerHTML='<h3>الناتج:</h3><p>سيظهر النص هنا بعد التحويل...</p>';
     }
 }
+
+// تأثير التمرير للصور الجانبية
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    document.querySelector('.left-img').style.transform = `translateY(calc(-50% + ${scrollY*0.3}px))`;
+    document.querySelector('.right-img').style.transform = `translateY(calc(-50% + ${scrollY*0.3}px))`;
+});
 
 function convertVideo(){
     const outputDiv = document.getElementById('output');
@@ -178,10 +214,5 @@ function speakText(text){
     speechSynthesis.speak(utterance);
 }
 </script>
-</body>
-</html>
-<!-- نص متحرك في أسفل الصفحة -->
-<div id="footerText">مجمع التربية السمعية للبنات</div>
-
 </body>
 </html>
