@@ -177,22 +177,23 @@ function convertVideo(){
     <p style="font-size:18px;font-weight:bold;">${text}</p>
     <p style="font-size:16px;color:gray;">${textEn}</p>`;
 
-    // تشغيل الصوت تلقائياً
-    speakText('ar'); // العربية أولاً
-    setTimeout(()=> speakText('en'), 3000); // الإنجليزية بعد 3 ثواني
+    // قراءة النص العربي ثم مباشرة النص الإنجليزي
+    speakSequential(currentText.ar, currentText.en);
 }
 
-function speakText(lang){
-    let utterance = null;
-    if(lang === 'ar' && currentText.ar){
-        utterance = new SpeechSynthesisUtterance(currentText.ar);
-        utterance.lang = "ar-QA"; // صوت عربي رجل قطرى
-    }
-    else if(lang === 'en' && currentText.en){
-        utterance = new SpeechSynthesisUtterance(currentText.en);
-        utterance.lang = "en-US";
-    }
-    if(utterance) speechSynthesis.speak(utterance);
+// دالة لتشغيل الصوتين بالتسلسل
+function speakSequential(arText, enText){
+    if(!arText && !enText) return;
+    const arUtter = new SpeechSynthesisUtterance(arText);
+    arUtter.lang = "ar-QA"; // صوت رجل عربي قطري
+    arUtter.onend = ()=>{
+        if(enText){
+            const enUtter = new SpeechSynthesisUtterance(enText);
+            enUtter.lang = "en-US";
+            speechSynthesis.speak(enUtter);
+        }
+    };
+    speechSynthesis.speak(arUtter);
 }
 </script>
 </body>
