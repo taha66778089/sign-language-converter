@@ -52,9 +52,10 @@ header { position: relative; padding: 50px 0 20px 0; }
 input[type="file"] { margin:20px 0; padding:10px; }
 button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer;}
 
-.output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px;}
-.welcome-box { margin-top:20px; padding:15px; border-radius:10px; display:flex; flex-direction:column; align-items:center; animation:fadeIn 1s ease-in-out; color:white;}
-.welcome-img { width:150px; margin-bottom:10px; }
+.output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px; }
+.welcome-box { margin-top:20px; padding:15px; border-radius:10px; display:flex; align-items:center; justify-content:center; gap:15px; animation:fadeIn 1s ease-in-out; color:white;}
+.welcome-box img { width:60px; height:60px; }
+
 .welcome-text { font-weight:bold; font-size:18px; }
 .welcome-text-en { font-size:15px; color: #f0f0f0; }
 
@@ -84,8 +85,8 @@ button { background-color:#1976d2; color:white; border:none; padding:15px 40px; 
 <body>
 
 <!-- الصور الجانبية -->
-<img src="https://i.postimg.cc/7Z9P5M2Q/sign-left.png" class="side-img left-img" alt="إعاقة سمعية">
-<img src="https://i.postimg.cc/wx9v8sR1/sign-right.png" class="side-img right-img" alt="لغة إشارة">
+<img src="https://i.postimg.cc/7Z9P5M2Q/sign-left.png" class="side-img left-img" alt="إعاقة سمعية">  
+<img src="https://i.postimg.cc/wx9v8sR1/sign-right.png" class="side-img right-img" alt="لغة إشارة">  
 
 <header>
 <div id="datetime"></div>
@@ -102,10 +103,11 @@ button { background-color:#1976d2; color:white; border:none; padding:15px 40px; 
 <button onclick="convertVideo()">ابدأ التحويل</button>
 
 <div class="welcome-box" id="welcomeBox" style="display:none;">
-<!-- الصورة الكبيرة هنا -->
-<img id="welcomeImg" src="https://i.postimg.cc/hPmktm4Q/1.jpg" class="welcome-img" alt="صورة ترحيبية">
+<img id="logoImg" src="https://i.postimg.cc/hPmktm4Q/1.jpg" alt="شعار">
+<div>
 <div class="welcome-text" id="welcomeText"></div>
 <div class="welcome-text-en" id="welcomeTextEn"></div>
+</div>
 </div>
 
 <div class="output" id="output">
@@ -148,47 +150,47 @@ function convertVideo(){
     const welcomeBox = document.getElementById('welcomeBox');
     const welcomeText = document.getElementById('welcomeText');
     const welcomeTextEn = document.getElementById('welcomeTextEn');
-    const welcomeImg = document.getElementById('welcomeImg');
+    const logoImg = document.getElementById('logoImg');
     const file = document.getElementById('videoInput').files[0];
 
     if(!file){ alert("من فضلك اختر فيديو أولاً"); return; }
 
-    let text="", textEn="", welcomeMessage="", welcomeMessageEn="", bgColor="", imgSrc="";
+    let text="", textEn="", welcomeMessage="", welcomeMessageEn="", bgColor="", logoSrc="";
 
     if(file.name.includes("1")){
         text="السلام عليكم أنا إسمي عبد السلام الوردات ... مع السلامة.";
         textEn="Hello, my name is Abdelsalam Alwardat ... Goodbye.";
         welcomeMessage="مرحباً بكم في الفيديو الأول: رسالة عبد السلام";
         welcomeMessageEn="Welcome to Video 1: Abdelsalam's Message";
-        bgColor="#1976d2"; imgSrc="https://i.postimg.cc/7Z9P5M2Q/sign-left.png";
+        bgColor="#1976d2"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
     }
     else if(file.name.includes("2")){
         text="السلام عليكم من فضلك أريد حجز تذكرة طيران ... شكراً لك.";
         textEn="Hello, please I would like to book a flight ... Thank you.";
         welcomeMessage="مرحباً بكم في الفيديو الثاني: حجز تذكرة طيران";
         welcomeMessageEn="Welcome to Video 2: Flight Booking Message";
-        bgColor="#43a047"; imgSrc="https://i.postimg.cc/wx9v8sR1/sign-right.png";
+        bgColor="#43a047"; logoSrc="https://i.postimg.cc/hPmktm4Q/2.jpg";
     }
     else if(file.name.includes("3")){
         text="السلام عليكم ، من فضلك أنا اسمى حسام الدين ... شكرا لكي .";
         textEn="Hello, my name is Hossam Eldin ... Thank you.";
         welcomeMessage="مرحباً بكم في الفيديو الثالث: موعد طبي";
         welcomeMessageEn="Welcome to Video 3: Medical Appointment Message";
-        bgColor="#f4511e"; imgSrc="https://i.postimg.cc/7Z9P5M2Q/sign-left.png";
+        bgColor="#f4511e"; logoSrc="https://i.postimg.cc/hPmktm4Q/3.jpg";
     }
     else{
         text="لم يتم التعرف على الفيديو، من فضلك استخدم فيديو رقم 1 أو 2 أو 3";
         textEn="Unrecognized video. Please use Video 1, 2, or 3.";
         welcomeMessage="فيديو غير معروف";
         welcomeMessageEn="Unknown Video";
-        bgColor="#9e9e9e"; imgSrc="https://i.postimg.cc/7Z9P5M2Q/sign-left.png";
+        bgColor="#9e9e9e"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
     }
 
     welcomeBox.style.display="flex";
     welcomeBox.style.backgroundColor=bgColor;
     welcomeText.textContent=welcomeMessage;
     welcomeTextEn.textContent=welcomeMessageEn;
-    welcomeImg.src=imgSrc;
+    logoImg.src=logoSrc;
 
     outputDiv.innerHTML = `
         <h3>الناتج:</h3>
@@ -211,3 +213,9 @@ function speakText(text){
 
 </body>
 </html>
+<!-- نص متحرك في أسفل الصفحة -->
+<div id="footerText">مجمع التربية السمعية للبنات</div>
+
+</body>
+</html>
+
