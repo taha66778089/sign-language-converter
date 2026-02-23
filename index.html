@@ -63,7 +63,7 @@ header { position: relative; padding: 50px 0 20px 0; }
 .container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; }
 
 input[type="file"] {
-    margin:20px 0; 
+    margin:20px 10px 20px 0; 
     padding:15px 25px;
     font-size:18px;
     font-weight:bold;
@@ -77,6 +77,23 @@ input[type="file"] {
 input[type="file"]:hover {
     background-color:#1565c0;
     box-shadow: 0 0 20px #2196f3, 0 0 40px #2196f3, 0 0 60px #2196f3;
+}
+
+#liveCaptureBtn {
+    margin:20px 0; 
+    padding:15px 25px;
+    font-size:18px;
+    font-weight:bold;
+    border:2px solid #1976d2;
+    border-radius:10px;
+    background-color:#0288d1;
+    color:white;
+    cursor:pointer;
+    transition:0.3s, box-shadow 0.3s;
+}
+#liveCaptureBtn:hover {
+    background-color:#0277bd;
+    box-shadow: 0 0 20px #0288d1, 0 0 40px #0288d1, 0 0 60px #0288d1;
 }
 
 button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer; transition:0.3s; }
@@ -110,7 +127,6 @@ button:hover { background-color:#1565c0; }
     padding:5px 0;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
 }
-
 </style>
 </head>
 <body>
@@ -139,6 +155,11 @@ button:hover { background-color:#1565c0; }
 <div>
 <h2>اختر فيديو بلغة الإشارة</h2>
 <input type="file" accept="video/*" id="videoInput" onchange="previewVideo()">
+<button id="liveCaptureBtn">التصوير المباشر</button>
+<br>
+<video id="liveVideo" autoplay style="display:none; width:45%; margin-top:10px;"></video>
+<button id="stopCaptureBtn" style="display:none; margin-top:10px;">إيقاف التصوير</button>
+
 <br>
 <button onclick="convertVideo()">ابدأ التحويل</button>
 
@@ -185,6 +206,46 @@ function previewVideo(){
     }
 }
 
+// الكود للتصوير المباشر
+const liveBtn = document.getElementById('liveCaptureBtn');
+const stopBtn = document.getElementById('stopCaptureBtn');
+const liveVideo = document.getElementById('liveVideo');
+const videoPlayer = document.getElementById('videoPlayer');
+let mediaRecorder, recordedBlobs;
+
+liveBtn.addEventListener('click', async () => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        liveVideo.srcObject = stream;
+        liveVideo.style.display = 'block';
+        stopBtn.style.display = 'inline-block';
+        recordedBlobs = [];
+        mediaRecorder = new MediaRecorder(stream);
+        
+        mediaRecorder.ondataavailable = event => {
+            if(event.data && event.data.size > 0) {
+                recordedBlobs.push(event.data);
+            }
+        };
+        mediaRecorder.start();
+    } catch(err) {
+        alert("تعذر الوصول للكاميرا: " + err);
+    }
+});
+
+stopBtn.addEventListener('click', () => {
+    mediaRecorder.stop();
+    liveVideo.srcObject.getTracks().forEach(track => track.stop());
+    stopBtn.style.display = 'none';
+    
+    const superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
+    const url = window.URL.createObjectURL(superBuffer);
+    videoPlayer.src = url;
+    videoPlayer.style.display = 'block';
+    videoPlayer.play();
+});
+
+// الكود لتحويل الفيديوهات (مع اللغات الثلاث)
 function convertVideo(){
     const outputDiv = document.getElementById('output');
     const welcomeBox = document.getElementById('welcomeBox');
@@ -192,12 +253,11 @@ function convertVideo(){
     const welcomeTextEn = document.getElementById('welcomeTextEn');
     const welcomeTextHi = document.getElementById('welcomeTextHi');
     const logoImg = document.getElementById('logoImg');
-    const file = document.getElementById('videoInput').files[0];
-    if(!file){ alert("من فضلك اختر فيديو أولاً"); return; }
-
+    const file = document.getElementById('videoInput').files[0] || null;
+    
     let text="", textEn="", textHi="", welcomeMessage="", welcomeMessageEn="", welcomeMessageHi="", bgColor="", logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
 
-    if(file.name.includes("1")){
+    if(file && file.name.includes("1")){
         text="السلام عليكم أنا إسمي عبد السلام الوردات ، معلم تربية خاصة بمجمع التربية السمعية للبنين في قطر، أهلا ومرحبا بكم ، على استعداد تام لتقديم المساعدة لكم في أي وقت ، مع السلامة.";
         textEn="Hello, my name is Abdelsalam Alwardat, a special education teacher at the Deaf Education Complex for Boys in Qatar. Welcome, I am ready to assist you anytime. Goodbye.";
         textHi="नमस्ते, मेरा नाम अब्देलसलाम अलवार्डट है, मैं कतर में बॉयज़ डिफ़ एजुकेशन कॉम्प्लेक्स में विशेष शिक्षा शिक्षक हूँ। स्वागत है, मैं किसी भी समय आपकी सहायता करने के लिए तैयार हूँ। अलविदा।";
@@ -206,7 +266,7 @@ function convertVideo(){
         welcomeMessageHi="वीडियो 1 में आपका स्वागत है: अब्देलसलाम का संदेश";
         bgColor="#1976d2"; 
     }
-    else if(file.name.includes("2")){
+    else if(file && file.name.includes("2")){
         text="السلام عليكم من فضلك أريد حجز تذكرة طيران للذهاب للسعودية يوم الأربعاء القادم على الخطوط القطرية .. شكراً لك على تعاونك";
         textEn="Hello, please I would like to book a flight ticket to Saudi Arabia next Wednesday on Qatar Airways. Thank you for your cooperation.";
         textHi="नमस्ते, कृपया मैं अगले बुधवार को कतार एयरवेज़ पर सऊदी अरब के लिए फ्लाइट टिकट बुक करना चाहता हूँ। आपके सहयोग के लिए धन्यवाद।";
@@ -215,7 +275,7 @@ function convertVideo(){
         welcomeMessageHi="वीडियो 2 में आपका स्वागत है: फ्लाइट बुकिंग संदेश";
         bgColor="#43a047"; 
     }
-    else if(file.name.includes("3")){
+    else if(file && file.name.includes("3")){
         text="السلام عليكم ، من فضلك أنا اسمي حسام الدين وعندى موعد طبى اليوم مع طبيب الأسرة ، أريد رقم للدخول الى الطبيب ، شكرا لكم .";
         textEn="Hello, my name is Hossam Eldin and I have a medical appointment today with the family doctor. I need the access number to see the doctor. Thank you.";
         textHi="नमस्ते, मेरा नाम हुसाम एल्दिन है और आज मेरा परिवार के डॉक्टर के साथ चिकित्सा अपॉइंटमेंट है। मुझे डॉक्टर को देखने के लिए प्रवेश संख्या चाहिए। धन्यवाद।";
