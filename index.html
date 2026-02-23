@@ -33,6 +33,21 @@ body {
 header { position: relative; padding: 50px 0 20px 0; }
 #datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px; color:white; }
 
+/* النص الكبير على يسار الصفحة */
+#sideText {
+    position:fixed;
+    top:50%;
+    left:10px;
+    transform: translateY(-50%);
+    font-size:60px;
+    font-weight:bold;
+    color: rgba(255,255,255,0.9);
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+/* الحاوية الرئيسية */
 .container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap;}
 input[type="file"] { margin:20px 0; padding:10px; }
 button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer; transition:0.3s;}
@@ -67,6 +82,9 @@ button:hover { background-color:#1565c0; }
 </style>
 </head>
 <body>
+
+<!-- النص الكبير على يسار الصفحة -->
+<div id="sideText">إشارتي هي لغتي</div>
 
 <header>
 <div id="datetime"></div>
@@ -177,15 +195,13 @@ function convertVideo(){
     <p style="font-size:18px;font-weight:bold;">${text}</p>
     <p style="font-size:16px;color:gray;">${textEn}</p>`;
 
-    // قراءة النص العربي ثم مباشرة النص الإنجليزي
     speakSequential(currentText.ar, currentText.en);
 }
 
-// دالة لتشغيل الصوتين بالتسلسل
 function speakSequential(arText, enText){
     if(!arText && !enText) return;
     const arUtter = new SpeechSynthesisUtterance(arText);
-    arUtter.lang = "ar-QA"; // صوت رجل عربي قطري
+    arUtter.lang = "ar-QA";
     arUtter.onend = ()=>{
         if(enText){
             const enUtter = new SpeechSynthesisUtterance(enText);
