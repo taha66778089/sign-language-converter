@@ -4,24 +4,59 @@
 <meta charset="UTF-8">
 <title>محوّل لغة الإشارة</title>
 <style>
-body { font-family: Arial, sans-serif; background: url('https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Qatar.svg') no-repeat center center fixed; background-size: cover; margin:0;padding:0; direction:rtl; text-align:center; }
-header { background-color: rgba(21,101,192,0.9); color:white; padding:20px 0; font-size:36px; font-weight:bold; position:relative;}
-#datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px;}
-.container { margin:50px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center;}
-input[type="file"] { margin:20px 0; padding:10px;}
+body {
+    font-family: Arial, sans-serif;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Qatar.svg') no-repeat center center fixed;
+    background-size: cover;
+    margin:0; padding:0;
+    direction:rtl; text-align:center;
+    overflow-x:hidden;
+}
+
+/* النص المتحرك أعلى الصفحة */
+#marquee {
+    font-size:36px;
+    font-weight:bold;
+    white-space: nowrap;
+    overflow:hidden;
+    display:block;
+    color: transparent;
+    background: linear-gradient(45deg, #ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
+    -webkit-background-clip: text;
+    animation: marquee 10s linear infinite;
+    margin:10px 0;
+}
+
+@keyframes marquee { 0%{transform:translateX(100%);}100%{transform:translateX(-100%);} }
+
+header { position: relative; padding: 50px 0 20px 0; }
+
+#datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px; }
+
+/* الصور الجانبية */
+.side-img { position:fixed; top:50%; transform:translateY(-50%); width:120px; animation:bounce 2s infinite; }
+.left-img { left:0; } .right-img { right:0; }
+@keyframes bounce {0%,100%{transform:translateY(-50%);}50%{transform:translateY(-60%);} }
+
+.container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center;}
+input[type="file"] { margin:20px 0; padding:10px; }
 button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer;}
 .output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px;}
 .welcome-box { margin-top:20px; padding:15px; border-radius:10px; display:flex; align-items:center; justify-content:center; gap:15px; animation:fadeIn 1s ease-in-out; color:white;}
-.welcome-box img { width:60px; height:60px; animation:bounce 1s infinite;}
-@keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-@keyframes fadeIn {from{opacity:0;} to{opacity:1;}}
+.welcome-box img { width:60px; height:60px; animation:bounce 1s infinite; }
+.welcome-text { font-weight:bold; font-size:16px;}
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
 </style>
 </head>
 <body>
 
+<!-- الصور الجانبية -->
+<img src="https://i.postimg.cc/7Z9P5M2Q/sign-left.png" class="side-img left-img" alt="إعاقة سمعية">
+<img src="https://i.postimg.cc/wx9v8sR1/sign-right.png" class="side-img right-img" alt="لغة إشارة">
+
 <header>
 <div id="datetime"></div>
-محوّل فيديو لغة الإشارة إلى نص أو صوت
+<div id="marquee">محوّل فيديو لغة الإشارة إلى نص أو صوت</div>
 </header>
 
 <div class="container">
@@ -35,7 +70,8 @@ button { background-color:#1976d2; color:white; border:none; padding:15px 40px; 
 
 <div class="welcome-box" id="welcomeBox" style="display:none;">
 <img id="logoImg" src="https://i.postimg.cc/hPmktm4Q/1.jpg" alt="شعار">
-<p id="welcomeText" style="font-weight:bold; font-size:16px;"></p>
+<div class="welcome-text" id="welcomeText"></div>
+<div class="welcome-text" id="welcomeTextEn"></div>
 </div>
 
 <div class="output" id="output">
@@ -46,69 +82,79 @@ button { background-color:#1976d2; color:white; border:none; padding:15px 40px; 
 </div>
 
 <script>
-function updateDateTime(){
-const now=new Date();
-document.getElementById('datetime').textContent=now.toLocaleString('ar-EG');
-}
+function updateDateTime(){ const now=new Date(); document.getElementById('datetime').textContent=now.toLocaleString('ar-EG'); }
 setInterval(updateDateTime,1000); updateDateTime();
 
 function previewVideo(){
 const videoInput=document.getElementById('videoInput');
 const videoPlayer=document.getElementById('videoPlayer');
+const welcomeBox=document.getElementById('welcomeBox');
 if(videoInput.files && videoInput.files[0]){
 const file=videoInput.files[0];
 const url=URL.createObjectURL(file);
 videoPlayer.src=url; videoPlayer.style.display='block'; videoPlayer.play();
 alert("تم تحميل الفيديو بنجاح");
-document.getElementById('welcomeBox').style.display='none'; // اخفاء الصندوق القديم
+welcomeBox.style.display='none';
+document.getElementById('output').innerHTML='<h3>الناتج:</h3><p>سيظهر النص هنا بعد التحويل...</p>';
 }
+
 }
 
 function convertVideo(){
 const outputDiv=document.getElementById('output');
 const welcomeBox=document.getElementById('welcomeBox');
 const welcomeText=document.getElementById('welcomeText');
+const welcomeTextEn=document.getElementById('welcomeTextEn');
 const logoImg=document.getElementById('logoImg');
 const file=document.getElementById('videoInput').files[0];
+
 if(!file){ alert("من فضلك اختر فيديو أولاً"); return; }
 
-let text="", welcomeMessage="", bgColor="", logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
+let text="", textEn="", welcomeMessage="", welcomeMessageEn="", bgColor="", logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
 
 if(file.name.includes("1")){
 text="السلام عليكم أنا إسمي عبد السلام الوردات ، معلم تربية خاصة بمجمع التربية السمعية للبنين في قطر، أهلا ومرحبا بكم ، على استعداد تام لتقديم المساعدة لكم في أي وقت ، مع السلامة.";
+textEn="Hello, my name is Abdelsalam Alwardat, a special education teacher at the Deaf Education Complex for Boys in Qatar. Welcome, I am ready to assist you anytime. Goodbye.";
 welcomeMessage="مرحباً بكم في الفيديو الأول: رسالة عبد السلام";
+welcomeMessageEn="Welcome to Video 1: Abdelsalam's Message";
 bgColor="#1976d2"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
 }
 else if(file.name.includes("2")){
 text="السلام عليكم من فضلك أريد حجز تذكرة طيران للذهاب للسعودية يوم الأربعاء القادم على الخطوط القطرية .. شكراً لك على تعاونك";
+textEn="Hello, please I would like to book a flight ticket to Saudi Arabia next Wednesday on Qatar Airways. Thank you for your cooperation.";
 welcomeMessage="مرحباً بكم في الفيديو الثاني: حجز تذكرة طيران";
+welcomeMessageEn="Welcome to Video 2: Flight Booking Message";
 bgColor="#43a047"; logoSrc="https://i.postimg.cc/hPmktm4Q/2.jpg";
 }
 else if(file.name.includes("3")){
 text="السلام عليكم ، من فضلك أنا اسمى حسام الدين وعندى موعد طبى اليوم مع طبيب الأسرة ، أريد رقم للدخول الى الطبيب ، شكرا لكي .";
+textEn="Hello, my name is Hossam Eldin and I have a medical appointment today with the family doctor. I need the access number to see the doctor. Thank you.";
 welcomeMessage="مرحباً بكم في الفيديو الثالث: موعد طبي";
+welcomeMessageEn="Welcome to Video 3: Medical Appointment Message";
 bgColor="#f4511e"; logoSrc="https://i.postimg.cc/hPmktm4Q/3.jpg";
 }
 else{
 text="لم يتم التعرف على الفيديو، من فضلك استخدم فيديو رقم 1 أو 2 أو 3";
-welcomeMessage="فيديو غير معروف"; bgColor="#9e9e9e"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
+textEn="Unrecognized video. Please use Video 1, 2, or 3.";
+welcomeMessage="فيديو غير معروف";
+welcomeMessageEn="Unknown Video";
+bgColor="#9e9e9e"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
 }
 
 welcomeBox.style.display="flex";
 welcomeBox.style.backgroundColor=bgColor;
 welcomeText.textContent=welcomeMessage;
+welcomeTextEn.textContent=textEn;
 logoImg.src=logoSrc;
 
-outputDiv.innerHTML=`<h3>الناتج:</h3><p style="font-size:18px;font-weight:bold;">${text}</p>`;
+outputDiv.innerHTML=`<h3>الناتج:</h3>
+<p style="font-size:18px;font-weight:bold;">${text}</p>
+<p style="font-size:16px;color:gray;">${textEn}</p>`;
 
 speakText(text);
 }
 
-function speakText(text){
-const utterance=new SpeechSynthesisUtterance(text);
-utterance.lang="ar-SA";
-speechSynthesis.speak(utterance);
-}
+function speakText(text){ const utterance=new SpeechSynthesisUtterance(text); utterance.lang="ar-SA"; speechSynthesis.speak(utterance); }
 </script>
 </body>
 </html>
