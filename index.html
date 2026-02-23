@@ -79,7 +79,7 @@ header { position: relative; padding: 50px 0 20px 0; }
     flex-wrap:wrap;
 }
 
-/* زر اختيار الفيديو أكبر وأزرق */
+/* زر اختيار الفيديو أكبر، أزرق، مع تأثير ظل متحرك عند المرور */
 input[type="file"] {
     margin:20px 0; 
     padding:15px 25px;
@@ -90,10 +90,11 @@ input[type="file"] {
     background-color:#2196f3;
     color:white;
     cursor:pointer;
-    transition:0.3s;
+    transition:0.3s, box-shadow 0.3s;
 }
 input[type="file"]:hover {
     background-color:#1565c0;
+    box-shadow: 0 0 20px #2196f3, 0 0 40px #2196f3, 0 0 60px #2196f3;
 }
 
 button {
