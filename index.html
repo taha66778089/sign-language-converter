@@ -44,11 +44,6 @@ header { position: relative; padding: 50px 0 20px 0; }
 
 #datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px; color:white; }
 
-/* الصور الجانبية مع تأثير التمرير */
-.side-img { position:fixed; width:120px; transition: transform 0.3s; }
-.left-img { left:0; top:50%; transform:translateY(-50%);}
-.right-img { right:0; top:50%; transform:translateY(-50%); }
-
 /* الحاوية الرئيسية */
 .container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap;}
 input[type="file"] { margin:20px 0; padding:10px; }
@@ -87,10 +82,6 @@ button:hover { background-color:#1565c0; }
 </style>
 </head>
 <body>
-
-<!-- الصور الجانبية -->
-<img src="https://qatareducation-my.sharepoint.com/:i:/g/personal/t_wahib1802_education_qa/IQBSxYRgbjWLTq9qbBwcp4HRAYdP73zk94MY0n3tZHaBXsA?e=Dbpe1D" class="side-img left-img" alt="لغة إشارة">
-<img src="https://qatareducation-my.sharepoint.com/:i:/g/personal/t_wahib1802_education_qa/IQBSxYRgbjWLTq9qbBwcp4HRAYdP73zk94MY0n3tZHaBXsA?e=Dbpe1D" class="side-img right-img" alt="لغة إشارة">
 
 <header>
 <div id="datetime"></div>
@@ -146,13 +137,6 @@ function previewVideo(){
         document.getElementById('output').innerHTML='<h3>الناتج:</h3><p>سيظهر النص هنا بعد التحويل...</p>';
     }
 }
-
-// تأثير التمرير للصور الجانبية
-window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    document.querySelector('.left-img').style.transform = `translateY(calc(-50% + ${scrollY*0.3}px))`;
-    document.querySelector('.right-img').style.transform = `translateY(calc(-50% + ${scrollY*0.3}px))`;
-});
 
 function convertVideo(){
     const outputDiv = document.getElementById('output');
