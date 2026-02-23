@@ -33,18 +33,22 @@ body {
 header { position: relative; padding: 50px 0 20px 0; }
 #datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px; color:white; }
 
-/* النص الكبير على يسار الصفحة */
+/* النص الكبير على يسار الصفحة ككلمات متحركة */
 #sideText {
     position:fixed;
     top:50%;
     left:10px;
     transform: translateY(-50%);
-    font-size:60px;
+    font-size:50px;
     font-weight:bold;
-    color: rgba(255,255,255,0.9);
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    color: white;
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+    background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ffff00, #ff00ff, #00ffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbow 5s linear infinite alternate;
 }
 
 /* الحاوية الرئيسية */
@@ -83,7 +87,7 @@ button:hover { background-color:#1565c0; }
 </head>
 <body>
 
-<!-- النص الكبير على يسار الصفحة -->
+<!-- النص الجانبي -->
 <div id="sideText">إشارتي هي لغتي</div>
 
 <header>
