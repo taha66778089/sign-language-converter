@@ -38,16 +38,14 @@ header { position: relative; padding: 50px 0 20px 0; }
     padding:5px 10px; border-radius:5px; color:white;
 }
 
-/* نص موقع الدوحة - قطر */
 #location {
     position:absolute; top:10px; right:10px;
     font-size:18px; background: rgba(0,0,0,0.5);
     padding:5px 10px; border-radius:5px; color:white;
 }
 
-/* النص العمودي على اليسار */
-#sideTextLeft {
-    position:fixed; top:50%; left:10px;
+#sideTextLeft, #sideTextRight {
+    position:fixed; top:50%;
     transform: translateY(-50%);
     font-size:50px; font-weight:bold;
     text-align:center; line-height:1.3;
@@ -57,22 +55,40 @@ header { position: relative; padding: 50px 0 20px 0; }
     animation: rainbow 5s linear infinite alternate;
 }
 
-/* النص العمودي على اليمين */
-#sideTextRight {
-    position:fixed; top:50%; right:10px;
-    transform: translateY(-50%);
-    font-size:50px; font-weight:bold;
-    text-align:center; line-height:1.3;
-    color: transparent;
-    background: linear-gradient(45deg, #ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
-    -webkit-background-clip: text;
-    animation: rainbow 5s linear infinite alternate-reverse;
+#sideTextLeft { left:10px; }
+#sideTextRight { right:10px; animation-direction: alternate-reverse; }
+
+.sideImage {
+    width:180px; height:180px;
+    object-fit:cover;
+    margin-top:15px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.4);
 }
 
-/* الحاوية الرئيسية */
-.container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap;}
+.container {
+    margin:20px auto;
+    padding:30px;
+    background-color: rgba(255,255,255,0.95);
+    border-radius:20px;
+    width:85%;
+    max-width:700px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+}
 input[type="file"] { margin:20px 0; padding:10px; }
-button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer; transition:0.3s;}
+button {
+    background-color:#1976d2;
+    color:white;
+    border:none;
+    padding:15px 40px;
+    border-radius:15px;
+    font-size:20px;
+    cursor:pointer;
+    transition:0.3s;
+}
 button:hover { background-color:#1565c0; }
 
 .output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px;}
@@ -107,16 +123,15 @@ button:hover { background-color:#1565c0; }
 
 <!-- النص العمودي على الجانبين -->
 <div id="sideTextLeft">
-إشارتي<br>
-هي<br>
-لغتي
+إشارتي<br>هي<br>لغتي
+<br>
+<img src="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg" class="sideImage">
 </div>
 
 <div id="sideTextRight">
-مجمع<br>
-التربية<br>
-السمعية<br>
-للبنات
+مجمع<br>التربية<br>السمعية<br>للبنات
+<br>
+<img src="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg" class="sideImage">
 </div>
 
 <header>
@@ -135,7 +150,7 @@ button:hover { background-color:#1565c0; }
 <button onclick="convertVideo()">ابدأ التحويل</button>
 
 <div class="welcome-box" id="welcomeBox" style="display:none;">
-<img id="logoImg" src="https://i.postimg.cc/hPmktm4Q/1.jpg" alt="شعار">
+<img id="logoImg" src="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg" alt="شعار">
 <div>
 <div class="welcome-text" id="welcomeText"></div>
 <div class="welcome-text-en" id="welcomeTextEn"></div>
@@ -185,35 +200,35 @@ function convertVideo(){
     const file = document.getElementById('videoInput').files[0];
     if(!file){ alert("من فضلك اختر فيديو أولاً"); return; }
 
-    let text="", textEn="", welcomeMessage="", welcomeMessageEn="", bgColor="", logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
+    let text="", textEn="", welcomeMessage="", welcomeMessageEn="", bgColor="", logoSrc="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg";
 
     if(file.name.includes("1")){
         text="السلام عليكم أنا إسمي عبد السلام الوردات ، معلم تربية خاصة بمجمع التربية السمعية للبنين في قطر، أهلا ومرحبا بكم ، على استعداد تام لتقديم المساعدة لكم في أي وقت ، مع السلامة.";
         textEn="Hello, my name is Abdelsalam Alwardat, a special education teacher at the Deaf Education Complex for Boys in Qatar. Welcome, I am ready to assist you anytime. Goodbye.";
         welcomeMessage="مرحباً بكم في الفيديو الأول: رسالة عبد السلام";
         welcomeMessageEn="Welcome to Video 1: Abdelsalam's Message";
-        bgColor="#1976d2"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
+        bgColor="#1976d2"; logoSrc="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg";
     }
     else if(file.name.includes("2")){
         text="السلام عليكم من فضلك أريد حجز تذكرة طيران للذهاب للسعودية يوم الأربعاء القادم على الخطوط القطرية .. شكراً لك على تعاونك";
         textEn="Hello, please I would like to book a flight ticket to Saudi Arabia next Wednesday on Qatar Airways. Thank you for your cooperation.";
         welcomeMessage="مرحباً بكم في الفيديو الثاني: حجز تذكرة طيران";
         welcomeMessageEn="Welcome to Video 2: Flight Booking Message";
-        bgColor="#43a047"; logoSrc="https://i.postimg.cc/hPmktm4Q/2.jpg";
+        bgColor="#43a047"; logoSrc="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg";
     }
     else if(file.name.includes("3")){
         text="السلام عليكم ، من فضلك أنا اسمي حسام الدين وعندى موعد طبى اليوم مع طبيب الأسرة ، أريد رقم للدخول الى الطبيب ، شكرا لكم .";
         textEn="Hello, my name is Hossam Eldin and I have a medical appointment today with the family doctor. I need the access number to see the doctor. Thank you.";
         welcomeMessage="مرحباً بكم في الفيديو الثالث: موعد طبي";
         welcomeMessageEn="Welcome to Video 3: Medical Appointment Message";
-        bgColor="#f4511e"; logoSrc="https://i.postimg.cc/hPmktm4Q/3.jpg";
+        bgColor="#f4511e"; logoSrc="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg";
     }
     else{
         text="لم يتم التعرف على الفيديو، من فضلك استخدم فيديو رقم 1 أو 2 أو 3";
         textEn="Unrecognized video. Please use Video 1, 2, or 3.";
         welcomeMessage="فيديو غير معروف";
         welcomeMessageEn="Unknown Video";
-        bgColor="#9e9e9e"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
+        bgColor="#9e9e9e"; logoSrc="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg";
     }
 
     currentText.ar = text;
@@ -236,7 +251,7 @@ function speakSequential(arText, enText){
     if(!arText && !enText) return;
     const arUtter = new SpeechSynthesisUtterance(arText);
     arUtter.lang = "ar-QA";
-    arUtter.onend = ()=>{
+    arUtter.onend = ()=>{ 
         if(enText){
             const enUtter = new SpeechSynthesisUtterance(enText);
             enUtter.lang = "en-US";
@@ -248,5 +263,3 @@ function speakSequential(arText, enText){
 </script>
 </body>
 </html>
-
-
