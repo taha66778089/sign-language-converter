@@ -2,11 +2,10 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محوّل لغة الإشارة</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background: url('https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Qatar.svg') no-repeat center center fixed;
             background-size: cover;
             margin: 0;
@@ -20,59 +19,31 @@
             padding: 20px 0;
             font-size: 36px;
             font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             position: relative;
-            overflow: hidden;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         #datetime {
             position: absolute;
             top: 10px;
             left: 10px;
-            font-size: 20px;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.5);
+            font-size: 18px;
+            background: rgba(0,0,0,0.5);
             padding: 5px 10px;
             border-radius: 5px;
-        }
-        .marquee {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marquee 10s linear infinite;
-            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ffff00, #ff00ff, #00ffff);
-            -webkit-background-clip: text;
-            color: transparent;
-            background-size: 200%;
-            font-size: 48px;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
         }
         .container {
             margin: 50px auto;
             padding: 30px;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255,255,255,0.95);
             border-radius: 20px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             width: 85%;
             max-width: 700px;
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        h2 {
-            color: #0d47a1;
-            flex: 1;
-        }
         input[type="file"] {
             margin: 20px 0;
             padding: 10px;
-            border: 2px solid #90caf9;
-            border-radius: 10px;
         }
         button {
             background-color: #1976d2;
@@ -82,161 +53,138 @@
             border-radius: 15px;
             font-size: 20px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0d47a1;
         }
         .output {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: rgba(227, 242, 253, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 10px;
         }
-        .output h3 {
-            color: #0d47a1;
+        .welcome-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3e0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            animation: fadeIn 1s ease-in-out;
         }
-        footer {
-            margin: 5px 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            text-align: right;
-        }
-        .animated-image {
-            width: 400px;
-            height: auto;
-            margin-right: 20px;
-            animation: bounce 2s infinite;
-        }
-        .logo-text {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-        }
-        .welcome-text, .welcome-text-right {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 36px;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ffff00, #ff00ff, #00ffff);
-            -webkit-background-clip: text;
-            color: transparent;
-            background-size: 200%;
-            animation: glow 1s infinite alternate;
-            text-align: center;
-            line-height: 1.5;
-        }
-        .welcome-text {
-            left: 10px;
-        }
-        .welcome-text-right {
-            right: 10px;
+        .welcome-box img {
+            width: 60px;
+            height: 60px;
+            animation: bounce 1s infinite;
         }
         @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px #ff0000, 0 0 20px #00ff00, 0 0 30px #0000ff, 0 0 40px #ffff00, 0 0 50px #ff00ff, 0 0 60px #00ffff;
-            }
-            to {
-                text-shadow: 0 0 20px #ff0000, 0 0 30px #00ff00, 0 0 40px #0000ff, 0 0 50px #ffff00, 0 0 60px #ff00ff, 0 0 70px #00ffff;
-            }
-        }
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-            100% { opacity: 1; }
+        @keyframes fadeIn {
+            from {opacity:0;}
+            to {opacity:1;}
         }
     </style>
 </head>
 <body>
-    <header>
-        <div id="datetime"></div>
-        <div class="marquee">محوّل فيديو لغة الإشارة إلى نص أو صوت</div>
-    </header>
 
-    <div class="container">
-        <video id="videoPlayer" controls style="display:none; width: 45%; margin-right: 20px;"></video>
-        <img src="https://i.postimg.cc/hPmktm4Q/1.jpg" alt="شعار بحث علمي" class="animated-image" style="width: 45%;">
-        <div>
-            <h2>اختر فيديو بلغة الإشارة</h2>
-            <input type="file" accept="video/*" id="videoInput" onchange="previewVideo()">
-            <br>
-            <button onclick="convertVideo()">ابدأ التحويل</button>
+<header>
+    <div id="datetime"></div>
+    محوّل فيديو لغة الإشارة إلى نص أو صوت
+</header>
 
-            <div class="output" id="output">
-                <h3>الناتج:</h3>
-                <p>سيظهر النص هنا بعد التحويل...</p>
-            </div>
+<div class="container">
+    <video id="videoPlayer" controls style="display:none; width:45%; margin-left:20px;"></video>
+
+    <div>
+        <h2>اختر فيديو بلغة الإشارة</h2>
+        <input type="file" accept="video/*" id="videoInput" onchange="previewVideo()">
+        <br>
+        <button onclick="convertVideo()">ابدأ التحويل</button>
+
+        <div class="welcome-box" id="welcomeBox" style="display:none;">
+            <img src="https://i.postimg.cc/hPmktm4Q/1.jpg" alt="شعار">
+            <p id="welcomeText" style="font-weight:bold; font-size:16px;"></p>
+        </div>
+
+        <div class="output" id="output">
+            <h3>الناتج:</h3>
+            <p>سيظهر النص هنا بعد التحويل...</p>
         </div>
     </div>
+</div>
 
-    <footer>
-        هذا الموقع من إعداد طالبات مجمع التربية السمعية للبنات
-    </footer>
+<script>
+function updateDateTime() {
+    const now = new Date();
+    document.getElementById('datetime').textContent =
+        now.toLocaleString('ar-EG');
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
 
-    <div class="logo-text">مجمع التربية السمعية</div>
-    <div class="welcome-text">مرحباً<br>بكم<br>في<br>موقعنا</div>
-    <div class="welcome-text-right">مرحباً<br>بكم<br>في<br>موقعنا</div>
+function previewVideo() {
+    const videoInput = document.getElementById('videoInput');
+    const videoPlayer = document.getElementById('videoPlayer');
 
-    <script>
-        function updateDateTime() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            const dateTimeString = now.toLocaleDateString('ar-EG', options);
-            document.getElementById('datetime').textContent = dateTimeString;
-        }
+    if (videoInput.files && videoInput.files[0]) {
+        const file = videoInput.files[0];
+        const url = URL.createObjectURL(file);
+        videoPlayer.src = url;
+        videoPlayer.style.display = 'block';
+        videoPlayer.play();
+        alert("تم تحميل الفيديو بنجاح");
+    }
+}
 
-        setInterval(updateDateTime, 1000);
-        updateDateTime();
+function convertVideo() {
+    const outputDiv = document.getElementById('output');
+    const welcomeBox = document.getElementById('welcomeBox');
+    const welcomeText = document.getElementById('welcomeText');
+    const file = document.getElementById('videoInput').files[0];
 
-        function previewVideo() {
-            const videoInput = document.getElementById('videoInput');
-            const videoPlayer = document.getElementById('videoPlayer');
+    if (!file) {
+        alert("من فضلك اختر فيديو أولاً");
+        return;
+    }
 
-            if (videoInput.files && videoInput.files[0]) {
-                const file = videoInput.files[0];
-                const url = URL.createObjectURL(file);
-                videoPlayer.src = url;
-                videoPlayer.style.display = 'block';
-                videoPlayer.play();
-                alert('تم تحميل الفيديو بنجاح!');
-            }
-        }
+    let text = "";
+    let welcomeMessage = "";
 
-        function convertVideo() {
-            const outputDiv = document.getElementById('output');
-            const text = "السلام عليكم أنا إسمي عبد السلام الوردات ، معلم تربية خاصة بمجمع التربية السمعية للبنين في قطر، أهلا ومرحبا بكم ، على استعداد تام لتقديم المساعدة لكم في أي وقت ، مع السلامة.";
+    if (file.name.includes("1")) {
+        text = "السلام عليكم أنا إسمي عبد السلام الوردات ، معلم تربية خاصة بمجمع التربية السمعية للبنين في قطر، أهلا ومرحبا بكم ، على استعداد تام لتقديم المساعدة لكم في أي وقت ، مع السلامة.";
+        welcomeMessage = "مرحباً بكم في الفيديو الأول: رسالة عبد السلام";
+    } 
+    else if (file.name.includes("2")) {
+        text = "السلام عليكم من فضلك أريد حجز تذكرة طيران للذهاب للسعودية يوم الأربعاء القادم على الخطوط القطرية .. شكراً لك على تعاونك";
+        welcomeMessage = "مرحباً بكم في الفيديو الثاني: حجز تذكرة طيران";
+    } 
+    else if (file.name.includes("3")) {
+        text = "السلام عليكم ، من فضلك أنا اسمى حسام الدين وعندى موعد طبى اليوم مع طبيب الأسرة ، أريد رقم للدخول الى الطبيب ، شكرا لكي .";
+        welcomeMessage = "مرحباً بكم في الفيديو الثالث: موعد طبي";
+    } 
+    else {
+        text = "لم يتم التعرف على الفيديو، من فضلك استخدم فيديو رقم 1 أو 2 أو 3";
+        welcomeMessage = "فيديو غير معروف";
+    }
 
-            outputDiv.innerHTML = `
-                <h3>الناتج:</h3>
-                <p style="font-size: 18px; font-weight: bold; animation: blink 1s infinite;">
-                    ${text}
-                </p>
-            `;
+    welcomeBox.style.display = "flex";
+    welcomeText.textContent = welcomeMessage;
 
-            speakText(text);
-        }
+    outputDiv.innerHTML = `
+        <h3>الناتج:</h3>
+        <p style="font-size:18px;font-weight:bold;">${text}</p>
+    `;
 
-        function speakText(text) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ar-SA';
-            utterance.pitch = 1;
-            utterance.rate = 1;
-            speechSynthesis.speak(utterance);
-        }
-    </script>
+    speakText(text);
+}
+
+function speakText(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "ar-SA";
+    speechSynthesis.speak(utterance);
+}
+</script>
+
 </body>
 </html>
