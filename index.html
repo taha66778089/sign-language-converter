@@ -15,7 +15,7 @@ body {
 
 /* النص المتحرك وملون أعلى الصفحة */
 #marquee {
-    font-size:40px;
+    font-size:36px;
     font-weight:bold;
     white-space: nowrap;
     overflow:hidden;
@@ -25,7 +25,7 @@ body {
     -webkit-background-clip: text;
     background-size: 300%;
     animation: marqueeMove 15s linear infinite, rainbow 5s linear infinite;
-    margin:15px 0;
+    margin:10px 0;
 }
 
 @keyframes marqueeMove {
@@ -43,50 +43,27 @@ header { position: relative; padding: 50px 0 20px 0; }
 
 #datetime { position:absolute; top:10px; left:10px; font-size:18px; background: rgba(0,0,0,0.5); padding:5px 10px; border-radius:5px; }
 
-/* الصور الجانبية ثابتة */
-.side-img { position:fixed; top:50%; transform:translateY(-50%); width:110px; }
-.left-img { left:10px; }
-.right-img { right:10px; }
+/* الصور الجانبية */
+.side-img { position:fixed; top:50%; transform:translateY(-50%); width:120px; animation:bounce 2s infinite; }
+.left-img { left:0; } .right-img { right:0; }
+@keyframes bounce {0%,100%{transform:translateY(-50%);}50%{transform:translateY(-60%);} }
 
-.container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:750px; }
+.container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center;}
 input[type="file"] { margin:20px 0; padding:10px; }
 button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer;}
-
-.output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px; }
+.output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px;}
 .welcome-box { margin-top:20px; padding:15px; border-radius:10px; display:flex; align-items:center; justify-content:center; gap:15px; animation:fadeIn 1s ease-in-out; color:white;}
-.welcome-box img { width:60px; height:60px; }
-
-.welcome-text { font-weight:bold; font-size:18px; }
-.welcome-text-en { font-size:15px; color: #f0f0f0; }
-
+.welcome-box img { width:60px; height:60px; animation:bounce 1s infinite; }
+.welcome-text { font-weight:bold; font-size:16px;}
+.welcome-text-en { font-size:14px; color: #f0f0f0; }
 @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-
-/* تذييل الصفحة النص المتحرك */
-#footerText {
-    font-size:28px;
-    font-weight:bold;
-    width:100%;
-    white-space:nowrap;
-    overflow:hidden;
-    color: transparent;
-    background: linear-gradient(45deg, #ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
-    -webkit-background-clip: text;
-    background-size: 300%;
-    animation: footerMove 12s linear infinite, rainbow 5s linear infinite;
-    margin:25px 0;
-}
-
-@keyframes footerMove {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
 </style>
 </head>
 <body>
 
 <!-- الصور الجانبية -->
-<img src="https://i.postimg.cc/7Z9P5M2Q/sign-left.png" class="side-img left-img" alt="إعاقة سمعية">  
-<img src="https://i.postimg.cc/wx9v8sR1/sign-right.png" class="side-img right-img" alt="لغة إشارة">  
+<img src="https://i.postimg.cc/7Z9P5M2Q/sign-left.png" class="side-img left-img" alt="إعاقة سمعية">
+<img src="https://i.postimg.cc/wx9v8sR1/sign-right.png" class="side-img right-img" alt="لغة إشارة">
 
 <header>
 <div id="datetime"></div>
@@ -114,7 +91,6 @@ button { background-color:#1976d2; color:white; border:none; padding:15px 40px; 
 <h3>الناتج:</h3>
 <p>سيظهر النص هنا بعد التحويل...</p>
 </div>
-
 </div>
 </div>
 
@@ -123,8 +99,7 @@ function updateDateTime(){
     const now = new Date();
     document.getElementById('datetime').textContent = now.toLocaleString('ar-EG');
 }
-setInterval(updateDateTime,1000);
-updateDateTime();
+setInterval(updateDateTime,1000); updateDateTime();
 
 function previewVideo(){
     const videoInput = document.getElementById('videoInput');
@@ -134,14 +109,12 @@ function previewVideo(){
     if(videoInput.files && videoInput.files[0]){
         const file = videoInput.files[0];
         const url = URL.createObjectURL(file);
-        videoPlayer.src = url;
-        videoPlayer.style.display='block';
+        videoPlayer.src = url; videoPlayer.style.display='block';
         videoPlayer.play();
         alert("تم تحميل الفيديو بنجاح");
-
+        // اخفاء الرسائل القديمة عند رفع فيديو جديد
         welcomeBox.style.display='none';
-        document.getElementById('output').innerHTML =
-        '<h3>الناتج:</h3><p>سيظهر النص هنا بعد التحويل...</p>';
+        document.getElementById('output').innerHTML='<h3>الناتج:</h3><p>سيظهر النص هنا بعد التحويل...</p>';
     }
 }
 
@@ -155,25 +128,25 @@ function convertVideo(){
 
     if(!file){ alert("من فضلك اختر فيديو أولاً"); return; }
 
-    let text="", textEn="", welcomeMessage="", welcomeMessageEn="", bgColor="", logoSrc="";
+    let text="", textEn="", welcomeMessage="", welcomeMessageEn="", bgColor="", logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
 
     if(file.name.includes("1")){
-        text="السلام عليكم أنا إسمي عبد السلام الوردات ... مع السلامة.";
-        textEn="Hello, my name is Abdelsalam Alwardat ... Goodbye.";
+        text="السلام عليكم أنا إسمي عبد السلام الوردات ، معلم تربية خاصة بمجمع التربية السمعية للبنين في قطر، أهلا ومرحبا بكم ، على استعداد تام لتقديم المساعدة لكم في أي وقت ، مع السلامة.";
+        textEn="Hello, my name is Abdelsalam Alwardat, a special education teacher at the Deaf Education Complex for Boys in Qatar. Welcome, I am ready to assist you anytime. Goodbye.";
         welcomeMessage="مرحباً بكم في الفيديو الأول: رسالة عبد السلام";
         welcomeMessageEn="Welcome to Video 1: Abdelsalam's Message";
         bgColor="#1976d2"; logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
     }
     else if(file.name.includes("2")){
-        text="السلام عليكم من فضلك أريد حجز تذكرة طيران ... شكراً لك.";
-        textEn="Hello, please I would like to book a flight ... Thank you.";
+        text="السلام عليكم من فضلك أريد حجز تذكرة طيران للذهاب للسعودية يوم الأربعاء القادم على الخطوط القطرية .. شكراً لك على تعاونك";
+        textEn="Hello, please I would like to book a flight ticket to Saudi Arabia next Wednesday on Qatar Airways. Thank you for your cooperation.";
         welcomeMessage="مرحباً بكم في الفيديو الثاني: حجز تذكرة طيران";
         welcomeMessageEn="Welcome to Video 2: Flight Booking Message";
         bgColor="#43a047"; logoSrc="https://i.postimg.cc/hPmktm4Q/2.jpg";
     }
     else if(file.name.includes("3")){
-        text="السلام عليكم ، من فضلك أنا اسمى حسام الدين ... شكرا لكي .";
-        textEn="Hello, my name is Hossam Eldin ... Thank you.";
+        text="السلام عليكم ، من فضلك أنا اسمى حسام الدين وعندى موعد طبى اليوم مع طبيب الأسرة ، أريد رقم للدخول الى الطبيب ، شكرا لكي .";
+        textEn="Hello, my name is Hossam Eldin and I have a medical appointment today with the family doctor. I need the access number to see the doctor. Thank you.";
         welcomeMessage="مرحباً بكم في الفيديو الثالث: موعد طبي";
         welcomeMessageEn="Welcome to Video 3: Medical Appointment Message";
         bgColor="#f4511e"; logoSrc="https://i.postimg.cc/hPmktm4Q/3.jpg";
@@ -187,30 +160,24 @@ function convertVideo(){
     }
 
     welcomeBox.style.display="flex";
-    welcomeBox.style.backgroundColor=bgColor;
-    welcomeText.textContent=welcomeMessage;
-    welcomeTextEn.textContent=welcomeMessageEn;
-    logoImg.src=logoSrc;
+    welcomeBox.style.backgroundColor = bgColor;
+    welcomeText.textContent = welcomeMessage;
+    welcomeTextEn.textContent = textEn;
+    logoImg.src = logoSrc;
 
-    outputDiv.innerHTML = `
-        <h3>الناتج:</h3>
-        <p style="font-size:18px;font-weight:bold;">${text}</p>
-        <p style="font-size:16px;color:gray;">${textEn}</p>
-    `;
+    outputDiv.innerHTML = `<h3>الناتج:</h3>
+    <p style="font-size:18px;font-weight:bold;">${text}</p>
+    <p style="font-size:16px;color:gray;">${textEn}</p>`;
 
     speakText(text);
 }
 
 function speakText(text){
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang="ar-SA";
-    speechSynthesis.speak(u);
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang="ar-SA";
+    speechSynthesis.speak(utterance);
 }
 </script>
-
-<!-- نص متحرك في أسفل الصفحة -->
-<div id="footerText">مجمع التربية السمعية للبنات</div>
-
 </body>
 </html>
 <!-- نص متحرك في أسفل الصفحة -->
@@ -218,4 +185,3 @@ function speakText(text){
 
 </body>
 </html>
-
