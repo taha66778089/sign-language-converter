@@ -185,6 +185,25 @@ function convertVideo(){
         welcomeMessageEn = "Unknown Video";
         welcomeMessageHi = "अज्ञात वीडियो";
         bgColor = "#9e9e9e"; 
+
+        currentText.ar = text;
+        currentText.en = textEn;
+        currentText.hi = textHi;
+
+        welcomeBox.style.display="flex";
+        welcomeBox.style.backgroundColor = bgColor;
+        welcomeText.textContent = welcomeMessage;
+        welcomeTextEn.textContent = welcomeMessageEn;
+        welcomeTextHi.textContent = welcomeMessageHi;
+
+        outputDiv.innerHTML = `<h3>الناتج:</h3>
+        <p style="font-size:18px;font-weight:bold;">${text}</p>
+        <p style="font-size:16px;color:gray;">${textEn}</p>
+        <p style="font-size:16px;color:gray;">${textHi}</p>`;
+
+        // تشغيل الصوت مباشرة مع ضبط الصوت الإنجليزي للرسالة العامة
+        speakSequential(text, textEn, textHi, true);
+        return;
     }
 
     currentText.ar = text;
@@ -202,11 +221,11 @@ function convertVideo(){
     <p style="font-size:16px;color:gray;">${textEn}</p>
     <p style="font-size:16px;color:gray;">${textHi}</p>`;
 
-    speakSequential(currentText.ar, currentText.en, currentText.hi);
+    speakSequential(currentText.ar, currentText.en, currentText.hi, false);
 }
 
-// الصوت الثلاثي محسّن وواضح
-function speakSequential(arText, enText, hiText){
+// الصوت الثلاثي محسّن، مع ضبط الصوت الإنجليزي للرسالة العامة فقط
+function speakSequential(arText, enText, hiText, isGeneral=false){
     if(!arText && !enText && !hiText) return;
 
     const arUtter = new SpeechSynthesisUtterance(arText);
@@ -219,9 +238,15 @@ function speakSequential(arText, enText, hiText){
         if(enText){
             const enUtter = new SpeechSynthesisUtterance(enText);
             enUtter.lang = "en-US";
-            enUtter.rate = 1.2;
-            enUtter.pitch = 1.0;
-            enUtter.volume = 1.2; // رفع الصوت الإنجليزي
+            if(isGeneral){
+                enUtter.rate = 1.3;      
+                enUtter.volume = 1.5;    
+                enUtter.pitch = 1.0;
+            } else {
+                enUtter.rate = 1.2;      
+                enUtter.volume = 1.2;
+                enUtter.pitch = 1.0;
+            }
             enUtter.onend = ()=>{
                 if(hiText){
                     const hiUtter = new SpeechSynthesisUtterance(hiText);
