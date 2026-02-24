@@ -205,9 +205,12 @@ function convertVideo(){
     speakSequential(currentText.ar, currentText.en, currentText.hi);
 }
 
-// صوت موحد لجميع الفيديوهات والرسائل العامة
+// صوت موحد ونقي لجميع الفيديوهات والرسائل العامة
 function speakSequential(arText, enText, hiText){
     if(!arText && !enText && !hiText) return;
+
+    // إيقاف أي أصوات جارية قبل التشغيل
+    speechSynthesis.cancel();
 
     const arUtter = new SpeechSynthesisUtterance(arText);
     arUtter.lang = "ar-QA";
@@ -220,8 +223,8 @@ function speakSequential(arText, enText, hiText){
             const enUtter = new SpeechSynthesisUtterance(enText);
             enUtter.lang = "en-US";
             enUtter.rate = 1.2;
-            enUtter.volume = 1.2;
             enUtter.pitch = 1.0;
+            enUtter.volume = 1.0;
 
             enUtter.onend = ()=>{
                 if(hiText){
