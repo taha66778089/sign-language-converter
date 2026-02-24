@@ -5,104 +5,108 @@
 <title>محوّل لغة الإشارة</title>
 
 <style>
-body{
+body {
     font-family: Arial, sans-serif;
-    background:url('https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Qatar.svg') no-repeat center center fixed;
-    background-size:cover;
-    margin:0;
-    padding:0;
-    direction:rtl;
-    text-align:center;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Qatar.svg') no-repeat center center fixed;
+    background-size: cover;
+    margin:0; padding:0;
+    direction:rtl; text-align:center;
+    overflow-x:hidden;
 }
 
-/* العنوان المتحرك */
-#marquee{
-    font-size:32px;
+#marquee {
+    font-size:36px;
     font-weight:bold;
-    margin:10px 0;
-    white-space:nowrap;
+    white-space: nowrap;
     overflow:hidden;
-    color:#0d47a1;
+    display:block;
+    color: transparent;
+    background: linear-gradient(45deg, #ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
+    -webkit-background-clip: text;
+    background-size: 300%;
+    animation: marqueeMove 15s linear infinite, rainbow 5s linear infinite;
+    margin:10px 0;
 }
 
-/* التاريخ والمكان */
-#datetime,#location{
+@keyframes marqueeMove {
+0%{transform:translateX(100%);}
+100%{transform:translateX(-100%);}
+}
+
+@keyframes rainbow {
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+header { position: relative; padding: 50px 0 20px 0; }
+
+#datetime, #location {
     position:absolute;
     top:10px;
-    background:rgba(0,0,0,0.5);
-    color:white;
+    font-size:18px;
+    background: rgba(0,0,0,0.5);
     padding:5px 10px;
     border-radius:5px;
+    color:white;
 }
-#datetime{left:10px;}
-#location{right:10px;}
 
-/* النص الجانبي */
-#sideTextLeft,#sideTextRight{
+#datetime { left:10px; }
+#location { right:10px; }
+
+#sideTextLeft, #sideTextRight {
     position:fixed;
     top:50%;
-    transform:translateY(-50%);
-    font-size:40px;
+    transform: translateY(-50%);
+    font-size:50px;
     font-weight:bold;
-    color:#0d47a1;
+    color: transparent;
+    background: linear-gradient(45deg,#ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
+    -webkit-background-clip:text;
+    animation: rainbow 5s linear infinite;
 }
-#sideTextLeft{left:10px;}
-#sideTextRight{right:10px;}
 
-.sideImage{
-    width:150px;
-    display:block;
-    margin:auto;
+#sideTextLeft { left:10px; }
+#sideTextRight { right:10px; }
+
+.sideImage {
+    width:180px;
+    height:180px;
+    border-radius:10px;
     margin-top:10px;
 }
 
-/* الصندوق الرئيسي */
-.container{
-    background:rgba(255,255,255,0.95);
-    width:70%;
-    margin:120px auto 60px auto;
-    padding:20px;
+.container {
+    margin:20px auto;
+    padding:30px;
+    background-color: rgba(255,255,255,0.95);
     border-radius:20px;
+    width:85%;
+    max-width:700px;
 }
 
-/* الفيديو في المنتصف */
-video{
-    display:block;
-    margin:10px auto;
-    width:50%;
-    border-radius:15px;
-}
-
-/* الأزرار */
-input,button{
-    padding:12px 25px;
-    font-size:18px;
-    border-radius:10px;
-    border:none;
-    background:#2196f3;
+button {
+    background-color:#1976d2;
     color:white;
-    margin:5px;
+    border:none;
+    padding:15px 40px;
+    border-radius:15px;
+    font-size:20px;
     cursor:pointer;
 }
 
-/* ناتج التحويل */
-.output{
-    margin-top:20px;
-    padding:15px;
-    background:#e3f2fd;
-    border-radius:10px;
-    font-size:18px;
-}
-
-/* الشريط السفلي */
-#footerMarquee{
+#footerMarquee {
+    font-size:28px;
+    white-space: nowrap;
+    overflow:hidden;
+    display:block;
+    color: transparent;
+    background: linear-gradient(45deg,#ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
+    -webkit-background-clip:text;
+    animation: marqueeMove 20s linear infinite, rainbow 5s linear infinite;
     position:fixed;
     bottom:0;
     width:100%;
-    background:#0d47a1;
-    color:white;
-    font-size:28px;
-    padding:5px;
 }
 </style>
 </head>
@@ -110,74 +114,117 @@ input,button{
 <body>
 
 <div id="sideTextLeft">
-إشارتي هي لغتي
+إشارتي<br>هي<br>لغتي<br>
 <img src="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg" class="sideImage">
 </div>
 
 <div id="sideTextRight">
-مجمع التربية السمعية للبنات
+مجمع<br>التربية<br>السمعية<br>للبنات<br>
 <img src="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg" class="sideImage">
 </div>
 
+<header>
 <div id="datetime"></div>
 <div id="location">الدوحة - قطر</div>
-
-<div id="marquee">محوّل فيديو لغة الإشارة إلى نص وصوت</div>
+<div id="marquee">محوّل فيديو لغة الإشارة إلى نص أو صوت</div>
+</header>
 
 <div class="container">
 
-<h2>اختر فيديو بلغة الإشارة</h2>
+<video id="videoPlayer" controls style="display:none;width:100%;margin-bottom:10px;"></video>
+<video id="liveVideo" autoplay style="display:none;width:100%;margin-bottom:10px;"></video>
 
-<input type="file" id="videoInput" accept="video/*" onchange="previewVideo()">
+<input type="file" accept="video/*" id="videoInput" onchange="previewVideo()"><br><br>
+
+<button onclick="startCamera()">📷 التصوير المباشر</button>
+<button id="stopBtn" style="display:none;">⏹ إيقاف التصوير</button><br><br>
 
 <button onclick="convertVideo()">ابدأ التحويل</button>
 
-<video id="videoPlayer" controls></video>
-
-<div class="output" id="output">
-سيظهر النص هنا بعد التحويل
-</div>
+<div id="output" style="margin-top:20px;font-size:18px;"></div>
 
 </div>
 
 <div id="footerMarquee">الموقع من إعداد / طالبات مجمع التربية السمعية للبنات</div>
 
 <script>
+let liveStream, mediaRecorder;
+
 function updateDateTime(){
-  document.getElementById("datetime").innerText =
-  new Date().toLocaleString("en-US",{hour12:false});
+    document.getElementById('datetime').textContent = new Date().toLocaleString("en-US",{hour12:false});
 }
-setInterval(updateDateTime,1000);
-updateDateTime();
+setInterval(updateDateTime,1000); updateDateTime();
 
 function previewVideo(){
-  const file=document.getElementById("videoInput").files[0];
-  const video=document.getElementById("videoPlayer");
-  video.src=URL.createObjectURL(file);
-  video.play();
+    let file=document.getElementById("videoInput").files[0];
+    let v=document.getElementById("videoPlayer");
+    v.src=URL.createObjectURL(file);
+    v.style.display="block";
 }
 
 function convertVideo(){
+    let file=document.getElementById("videoInput").files[0];
+    let out=document.getElementById("output");
 
-let ar="",en="",hi="";
+    if(!file){ alert("اختر فيديو"); return; }
 
-ar="السلام عليكم، أنا من ذوي الإعاقة السمعية وأتحدث بلغة الإشارة. أرجو مساعدتكم لإنهاء مهمتي هنا، شكرًا لتعاونكم.";
+    if(file.name.includes("1")){
+        speakAll(
+        "السلام عليكم أنا إسمي عبد السلام",
+        "Hello my name is Abdelsalam",
+        "नमस्ते मेरा नाम अब्देलसलाम है"
+        );
+    }
+    else if(file.name.includes("2")){
+        speakAll(
+        "أريد حجز تذكرة طيران",
+        "I want to book a flight ticket",
+        "मैं हवाई टिकट बुक करना चाहता हूँ"
+        );
+    }
+    else if(file.name.includes("3")){
+        speakAll(
+        "لدي موعد طبي اليوم",
+        "I have a medical appointment today",
+        "आज मेरी डॉक्टर से मुलाकात है"
+        );
+    }
+}
 
-en="Hello, I am a person with hearing disability and I communicate only using sign language. I kindly ask for your help to complete my task here. Thank you for your cooperation.";
+function startCamera(){
+    navigator.mediaDevices.getUserMedia({video:true})
+    .then(stream=>{
+        liveStream=stream;
+        let v=document.getElementById("liveVideo");
+        v.srcObject=stream;
+        v.style.display="block";
+        document.getElementById("stopBtn").style.display="inline";
+    });
+}
 
-hi="नमस्ते, मैं श्रवण बाधित व्यक्ति हूँ और केवल सांकेतिक भाषा का उपयोग करता हूँ। कृपया मेरी सहायता करें। धन्यवाद।";
+document.getElementById("stopBtn").onclick=function(){
+    liveStream.getTracks().forEach(t=>t.stop());
+    document.getElementById("liveVideo").style.display="none";
+    this.style.display="none";
 
-document.getElementById("output").innerHTML=
-"<p>"+ar+"</p><p>"+en+"</p><p>"+hi+"</p>";
+    speakAll(
+    "السلام عليكم، أنا من ذوي الإعاقة السمعية وأحتاج مساعدتكم",
+    "Hello, I am a person with hearing disability and need your help",
+    "नमस्ते, मैं श्रवण बाधित व्यक्ति हूँ और आपकी सहायता चाहता हूँ"
+    );
+};
 
-speak(ar,"ar-QA",()=>speak(en,"en-US",()=>speak(hi,"hi-IN")));
+function speakAll(ar,en,hi){
+    let out=document.getElementById("output");
+    out.innerHTML=`<p>${ar}</p><p>${en}</p><p>${hi}</p>`;
+    speak(ar,"ar-QA",()=>speak(en,"en-US",()=>speak(hi,"hi-IN")));
 }
 
 function speak(text,lang,cb){
- let u=new SpeechSynthesisUtterance(text);
- u.lang=lang;
- u.onend=cb;
- speechSynthesis.speak(u);
+    let u=new SpeechSynthesisUtterance(text);
+    u.lang=lang;
+    u.onend=cb;
+    speechSynthesis.speak(u);
 }
 </script>
 
