@@ -45,239 +45,157 @@ header { position: relative; padding: 50px 0 20px 0; }
 #datetime { left:10px; }
 #location { right:10px; }
 
-#sideTextLeft, #sideTextRight {
-    position:fixed; top:50%;
-    transform: translateY(-50%);
-    font-size:50px; font-weight:bold;
-    text-align:center; line-height:1.3;
-    color: transparent;
-    background: linear-gradient(45deg, #ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
-    -webkit-background-clip: text;
-    animation: rainbow 5s linear infinite alternate;
-}
-#sideTextLeft { left:10px; }
-#sideTextRight { right:10px; animation-direction: alternate-reverse; }
+.container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; }
 
-.sideImage { width:180px; height:180px; object-fit:cover; margin-top:15px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.4); }
-
-.container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; }
-
-input[type="file"] {
-    margin:20px 10px 20px 0; 
-    padding:15px 25px;
-    font-size:18px;
-    font-weight:bold;
-    border:2px solid #1976d2;
-    border-radius:10px;
-    background-color:#2196f3;
-    color:white;
-    cursor:pointer;
-    transition:0.3s, box-shadow 0.3s;
-}
-input[type="file"]:hover {
-    background-color:#1565c0;
-    box-shadow: 0 0 20px #2196f3, 0 0 40px #2196f3, 0 0 60px #2196f3;
-}
-
-#liveCaptureBtn {
-    margin:20px 0; 
-    padding:15px 25px;
-    font-size:18px;
-    font-weight:bold;
-    border:2px solid #1976d2;
-    border-radius:10px;
-    background-color:#0288d1;
-    color:white;
-    cursor:pointer;
-    transition:0.3s, box-shadow 0.3s;
-}
-#liveCaptureBtn:hover {
-    background-color:#0277bd;
-    box-shadow: 0 0 20px #0288d1, 0 0 40px #0288d1, 0 0 60px #0288d1;
-}
-
-button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer; transition:0.3s; }
-button:hover { background-color:#1565c0; }
+button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer; }
 
 .output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px;}
-.welcome-box { margin-top:20px; padding:15px; border-radius:10px; display:flex; align-items:center; justify-content:center; gap:15px; animation:fadeIn 1s ease-in-out; color:white;}
-.welcome-box img { width:60px; height:60px; animation:bounce 1s infinite; }
-.welcome-text, .welcome-text-en, .welcome-text-hi { font-weight:bold; font-size:16px; margin:2px 0;}
-.welcome-text-en { font-size:14px; color:#f0f0f0;}
-.welcome-text-hi { font-size:14px; color:#f8f8f0;}
-@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-@keyframes bounce {0%,100%{transform:translateY(0);}50%{transform:translateY(-10%);} }
-
-#footerMarquee {
-    font-size:28px;
-    font-weight:bold;
-    white-space: nowrap;
-    overflow:hidden;
-    display:block;
-    color: transparent;
-    background: linear-gradient(45deg, #ff0000,#00ff00,#0000ff,#ffff00,#ff00ff,#00ffff);
-    -webkit-background-clip: text;
-    background-size: 300%;
-    animation: marqueeMove 20s linear infinite, rainbow 5s linear infinite;
-    position:fixed;
-    bottom:0;
-    width:100%;
-    text-align:center;
-    padding:5px 0;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
-}
 </style>
 </head>
 <body>
 
-<div id="sideTextLeft">
-إشارتي<br>هي<br>لغتي
-<br>
-<img src="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg" class="sideImage">
-</div>
-
-<div id="sideTextRight">
-مجمع<br>التربية<br>السمعية<br>للبنات
-<br>
-<img src="https://imgbob.net/ib/XSjj1pw9jxL9V5V_1771871852.jpg" class="sideImage">
-</div>
-
 <header>
     <div id="datetime"></div>
     <div id="location">الدوحة - قطر</div>
-    <div id="marquee">محوّل فيديو لغة الإشارة إلى نص أو صوت - مدعم بالذكاء الإصطناعي</div>
+    <div id="marquee">محوّل فيديو لغة الإشارة إلى نص أو صوت</div>
 </header>
 
 <div class="container">
-<video id="videoPlayer" controls style="display:none; width:45%; margin-left:20px;"></video>
 
-<div>
 <h2>اختر فيديو بلغة الإشارة</h2>
 <input type="file" accept="video/*" id="videoInput" onchange="previewVideo()">
+<br><br>
 <button id="liveCaptureBtn">التصوير المباشر</button>
+<br><br>
+<video id="liveVideo" autoplay style="display:none; width:60%;"></video>
 <br>
-<video id="liveVideo" autoplay style="display:none; width:45%; margin-top:10px;"></video>
-<button id="stopCaptureBtn" style="display:none; margin-top:10px;">إيقاف التصوير</button>
-
-<br>
+<button id="stopCaptureBtn" style="display:none;">إيقاف التصوير</button>
+<br><br>
 <button onclick="convertVideo()">ابدأ التحويل</button>
 
-<div class="welcome-box" id="welcomeBox" style="display:none;">
-<img id="logoImg" src="https://i.postimg.cc/hPmktm4Q/1.jpg" alt="شعار">
-<div>
-<div class="welcome-text" id="welcomeText"></div>
-<div class="welcome-text-en" id="welcomeTextEn"></div>
-<div class="welcome-text-hi" id="welcomeTextHi"></div>
-</div>
-</div>
+<video id="videoPlayer" controls style="display:none; width:60%; margin-top:10px;"></video>
 
 <div class="output" id="output">
 <h3>الناتج:</h3>
 <p>سيظهر النص هنا بعد التحويل...</p>
 </div>
-</div>
-</div>
 
-<div id="footerMarquee">الموقع من إعداد / طالبات مجمع التربية السمعية للبنات</div>
+</div>
 
 <script>
-let currentText = {ar:'', en:'', hi:''};
-
+// التاريخ والوقت
 function updateDateTime(){
-    const now = new Date();
-    document.getElementById('datetime').textContent = now.toLocaleString('en-US', {hour12:false});
+    document.getElementById('datetime').textContent = new Date().toLocaleString("en-US",{hour12:false});
 }
-setInterval(updateDateTime,1000); 
-updateDateTime();
+setInterval(updateDateTime,1000); updateDateTime();
 
+// الفيديوهات والرسائل
+const videosMessages = {
+    1: {
+        ar: "السلام عليكم أنا إسمي عبد السلام الوردات ، معلم تربية خاصة بمجمع التربية السمعية للبنين في قطر، أهلا ومرحبا بكم ، على استعداد تام لتقديم المساعدة لكم في أي وقت ، مع السلامة.",
+        en: "Hello, my name is Abdelsalam Alwardat, a special education teacher at the Deaf Education Complex for Boys in Qatar. Welcome, I am ready to assist you anytime. Goodbye.",
+        hi: "नमस्ते, मेरा नाम अब्देलसलाम अलवार्डट है, मैं कतर में बॉयज़ डिफ़ एजुकेशन कॉम्प्लेक्स में विशेष शिक्षा शिक्षक हूँ। स्वागत है, मैं किसी भी समय आपकी सहायता करने के लिए तैयार हूँ। अलविदा।"
+    },
+    2: {
+        ar: "السلام عليكم من فضلك أريد حجز تذكرة طيران للذهاب للسعودية يوم الأربعاء القادم على الخطوط القطرية .. شكراً لك على تعاونك",
+        en: "Hello, please I would like to book a flight ticket to Saudi Arabia next Wednesday on Qatar Airways. Thank you for your cooperation.",
+        hi: "नमस्ते, कृपया मैं अगले बुधवार को कतार एयरवेज़ पर सऊदी अरब के लिए फ्लाइट टिकट बुक करना चाहता हूँ। आपके सहयोग के लिए धन्यवाद।"
+    },
+    3: {
+        ar: "السلام عليكم ، من فضلك أنا اسمي حسام الدين وعندى موعد طبى اليوم مع طبيب الأسرة ، أريد رقم للدخول الى الطبيب ، شكرا لكم .",
+        en: "Hello, my name is Hossam Eldin and I have a medical appointment today with the family doctor. I need the access number to see the doctor. Thank you.",
+        hi: "नमस्ते, मेरा नाम हुसाम एल्दिन है और आज मेरा परिवार के डॉक्टर के साथ चिकित्सा अपॉइंटमेंट है। मुझे डॉक्टर को देखने के लिए प्रवेश संख्या चाहिए। धन्यवाद।"
+    },
+    unknown: {
+        ar: "السلام عليكم ، أنا من ذوي الإعاقة السمعية وأريد مساعدتك لأنهاء مهمتي هنا ، شكرًا لك على تعاونك معي.",
+        en: "Hello, I am hearing impaired and I need your help to complete my task here. Thank you for your cooperation.",
+        hi: "नमस्ते, मैं श्रवण बाधित हूँ और मुझे अपना कार्य पूरा करने के लिए आपकी सहायता चाहिए। आपके सहयोग के लिए धन्यवाद।"
+    }
+};
+
+// عرض الفيديو المعاينة
+let videoPlayer = document.getElementById("videoPlayer");
 function previewVideo(){
-    const videoInput = document.getElementById('videoInput');
-    const videoPlayer = document.getElementById('videoPlayer');
-    const welcomeBox = document.getElementById('welcomeBox');
-    if(videoInput.files && videoInput.files[0]){
-        const file = videoInput.files[0];
+    const file = document.getElementById("videoInput").files[0];
+    const liveVideo = document.getElementById("liveVideo");
+    if(file){
         const url = URL.createObjectURL(file);
-        videoPlayer.src = url; videoPlayer.style.display='block';
+        videoPlayer.src = url;
+        videoPlayer.style.display="block";
         videoPlayer.play();
-        welcomeBox.style.display='none';
-        document.getElementById('output').innerHTML='<h3>الناتج:</h3><p>سيظهر النص هنا بعد التحويل...</p>';
-        currentText = {ar:'', en:'', hi:''};
+        liveVideo.style.display="none";
+        document.getElementById("output").innerHTML='<h3>الناتج:</h3><p>سيظهر النص هنا بعد التحويل...</p>';
     }
 }
 
-// الكود للتصوير المباشر
+// التصوير المباشر
 const liveBtn = document.getElementById('liveCaptureBtn');
 const stopBtn = document.getElementById('stopCaptureBtn');
 const liveVideo = document.getElementById('liveVideo');
-const videoPlayer = document.getElementById('videoPlayer');
-let mediaRecorder, recordedBlobs;
+let mediaRecorder, recordedBlobs=[];
 
-liveBtn.addEventListener('click', async () => {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        liveVideo.srcObject = stream;
-        liveVideo.style.display = 'block';
-        stopBtn.style.display = 'inline-block';
-        recordedBlobs = [];
-        mediaRecorder = new MediaRecorder(stream);
-        
-        mediaRecorder.ondataavailable = event => {
-            if(event.data && event.data.size > 0) {
-                recordedBlobs.push(event.data);
-            }
-        };
-        mediaRecorder.start();
-    } catch(err) {
-        alert("تعذر الوصول للكاميرا: " + err);
-    }
-});
+liveBtn.onclick = async ()=>{
+    const stream = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+    liveVideo.srcObject = stream;
+    liveVideo.style.display="block";
+    stopBtn.style.display="inline-block";
+    recordedBlobs=[];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e=>recordedBlobs.push(e.data);
+    mediaRecorder.start();
+};
 
-stopBtn.addEventListener('click', () => {
+stopBtn.onclick = ()=>{
     mediaRecorder.stop();
-    liveVideo.srcObject.getTracks().forEach(track => track.stop());
-    stopBtn.style.display = 'none';
-    
+    liveVideo.srcObject.getTracks().forEach(t=>t.stop());
+    stopBtn.style.display="none";
     const superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
-    const url = window.URL.createObjectURL(superBuffer);
-    videoPlayer.src = url;
-    videoPlayer.style.display = 'block';
+    videoPlayer.src = window.URL.createObjectURL(superBuffer);
+    videoPlayer.style.display="block";
     videoPlayer.play();
-});
+};
 
-// ================== التعديل فقط هنا ==================
+// تحويل الفيديو + الرسائل
 function convertVideo(){
-    const outputDiv = document.getElementById('output');
-    const liveVideo = document.getElementById('liveVideo');
+    const outputDiv = document.getElementById("output");
+    const liveVideo = document.getElementById("liveVideo");
+    const file = document.getElementById("videoInput").files[0];
 
-    // إخفاء فيديو التصوير المباشر
-    liveVideo.style.display = "none";
+    // إخفاء الفيديو المباشر
+    liveVideo.style.display="none";
 
-    const text = "السلام عليكم ، من فضلك أنا من ذوي الإعاقة السمعية وأريد مساعدتك لأنهاء مهمتي هنا ، شكرًا لك لتعاونك معي";
-    const textEn = "Hello, I am hearing impaired and I need your help to complete my task here. Thank you for your cooperation.";
-    const textHi = "नमस्ते, मैं श्रवण बाधित हूँ और मुझे अपना कार्य पूरा करने के लिए आपकी सहायता चाहिए। आपके सहयोग के लिए धन्यवाद।";
+    let msg = videosMessages.unknown;
+
+    if(file){
+        const name = file.name.toLowerCase();
+        if(name.includes("1")) msg = videosMessages[1];
+        else if(name.includes("2")) msg = videosMessages[2];
+        else if(name.includes("3")) msg = videosMessages[3];
+    }
 
     outputDiv.innerHTML = `<h3>الناتج:</h3>
-    <p style="font-size:18px;font-weight:bold;">${text}</p>
-    <p style="font-size:16px;color:gray;">${textEn}</p>
-    <p style="font-size:16px;color:gray;">${textHi}</p>`;
+        <p style="font-size:18px;font-weight:bold;">${msg.ar}</p>
+        <p style="font-size:16px;color:gray;">${msg.en}</p>
+        <p style="font-size:16px;color:gray;">${msg.hi}</p>`;
 
-    speakSequential(text, textEn, textHi);
+    speakSequential(msg.ar, msg.en, msg.hi);
 }
 
-function speakSequential(arText, enText, hiText){
-    const arUtter = new SpeechSynthesisUtterance(arText);
-    arUtter.lang = "ar-QA";
-    arUtter.onend = ()=>{
-        const enUtter = new SpeechSynthesisUtterance(enText);
-        enUtter.lang = "en-US";
-        enUtter.onend = ()=>{
-            const hiUtter = new SpeechSynthesisUtterance(hiText);
-            hiUtter.lang = "hi-IN";
-            speechSynthesis.speak(hiUtter);
-        }
-        speechSynthesis.speak(enUtter);
+// قراءة الرسائل صوتياً
+function speakSequential(ar,en,hi){
+    const a = new SpeechSynthesisUtterance(ar);
+    a.lang="ar-QA";
+    a.onend = ()=>{
+        const e = new SpeechSynthesisUtterance(en);
+        e.lang="en-US";
+        e.onend = ()=>{
+            const h = new SpeechSynthesisUtterance(hi);
+            h.lang="hi-IN";
+            speechSynthesis.speak(h);
+        };
+        speechSynthesis.speak(e);
     };
-    speechSynthesis.speak(arUtter);
+    speechSynthesis.speak(a);
 }
 </script>
 </body>
