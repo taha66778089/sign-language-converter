@@ -17,8 +17,8 @@ header { position: relative; padding: 50px 0 20px 0; }
 .container { margin:20px auto; padding:30px; background-color: rgba(255,255,255,0.95); border-radius:20px; width:85%; max-width:700px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; }
 input[type="file"] { margin:20px 10px 20px 0; padding:15px 25px; font-size:18px; font-weight:bold; border:2px solid #1976d2; border-radius:10px; background-color:#2196f3; color:white; cursor:pointer; transition:0.3s, box-shadow 0.3s;}
 input[type="file"]:hover { background-color:#1565c0; box-shadow: 0 0 20px #2196f3, 0 0 40px #2196f3, 0 0 60px #2196f3;}
-#liveCaptureBtn, #stopCamBtn { margin:10px 5px; padding:15px 25px; font-size:18px; font-weight:bold; border:2px solid #1976d2; border-radius:10px; background-color:#0288d1; color:white; cursor:pointer; transition:0.3s, box-shadow 0.3s;}
-#liveCaptureBtn:hover, #stopCamBtn:hover { background-color:#0277bd; box-shadow: 0 0 20px #0288d1, 0 0 40px #0288d1, 0 0 60px #0288d1;}
+#liveCaptureBtn { margin:20px 0; padding:15px 25px; font-size:18px; font-weight:bold; border:2px solid #1976d2; border-radius:10px; background-color:#0288d1; color:white; cursor:pointer; transition:0.3s, box-shadow 0.3s;}
+#liveCaptureBtn:hover { background-color:#0277bd; box-shadow: 0 0 20px #0288d1, 0 0 40px #0288d1, 0 0 60px #0288d1;}
 button { background-color:#1976d2; color:white; border:none; padding:15px 40px; border-radius:15px; font-size:20px; cursor:pointer; transition:0.3s; }
 button:hover { background-color:#1565c0; }
 .output { margin-top:20px; padding:15px; background-color:#e3f2fd; border-radius:10px;}
@@ -58,10 +58,7 @@ button:hover { background-color:#1565c0; }
 <div>
 <h2>اختر فيديو بلغة الإشارة</h2>
 <input type="file" accept="video/*" id="videoInput" onchange="previewVideo()">
-
-<!-- أزرار التحكم بالكاميرا -->
 <button id="liveCaptureBtn">التصوير المباشر</button>
-<button id="stopCamBtn">إيقاف الكاميرا</button>
 <br>
 <video id="liveVideo" autoplay style="display:none; width:45%; margin-top:10px;"></video>
 
@@ -89,7 +86,6 @@ button:hover { background-color:#1565c0; }
 <script>
 let currentText = {ar:'', en:'', hi:''};
 
-// تحديث التاريخ والوقت
 function updateDateTime(){
     const now = new Date();
     document.getElementById('datetime').textContent = now.toLocaleString('en-US', {hour12:false});
@@ -97,7 +93,6 @@ function updateDateTime(){
 setInterval(updateDateTime,1000); 
 updateDateTime();
 
-// عرض الفيديو المختار
 function previewVideo(){
     const videoInput = document.getElementById('videoInput');
     const videoPlayer = document.getElementById('videoPlayer');
@@ -113,61 +108,37 @@ function previewVideo(){
     }
 }
 
-// التصوير المباشر
+// التصوير المباشر بدون زر إيقاف
 const liveBtn = document.getElementById('liveCaptureBtn');
-const stopBtn = document.getElementById('stopCamBtn');
 const liveVideo = document.getElementById('liveVideo');
-let liveStream = null;
-let mediaRecorder = null;
-let recordedBlobs = [];
+const videoPlayer = document.getElementById('videoPlayer');
+let mediaRecorder, recordedBlobs;
 
-// تشغيل الكاميرا
 liveBtn.addEventListener('click', async () => {
     try {
-        if (liveStream) return;
-
-        liveStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        liveVideo.srcObject = liveStream;
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        liveVideo.srcObject = stream;
         liveVideo.style.display = 'block';
-
         recordedBlobs = [];
-        mediaRecorder = new MediaRecorder(liveStream);
-        mediaRecorder.ondataavailable = event => { 
-            if(event.data && event.data.size > 0) recordedBlobs.push(event.data); 
-        };
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = event => { if(event.data && event.data.size > 0) recordedBlobs.push(event.data); };
         mediaRecorder.start();
     } catch(err) {
         alert("تعذر الوصول للكاميرا: " + err);
     }
 });
 
-// إيقاف الكاميرا يدويًا
-stopBtn.addEventListener('click', () => {
-    if(liveStream){
-        liveStream.getTracks().forEach(track => track.stop());
-        liveStream = null;
-        liveVideo.srcObject = null;
-        liveVideo.style.display = 'none';
-    }
-});
-
-// عند التحويل، الكاميرا تتوقف تلقائي
 function convertVideo(){
     const outputDiv = document.getElementById('output');
     const welcomeBox = document.getElementById('welcomeBox');
     const welcomeText = document.getElementById('welcomeText');
     const welcomeTextEn = document.getElementById('welcomeTextEn');
     const welcomeTextHi = document.getElementById('welcomeTextHi');
-
-    // إيقاف الكاميرا لو شغالة
-    if(liveStream){
-        liveStream.getTracks().forEach(track => track.stop());
-        liveStream = null;
-        liveVideo.srcObject = null;
-        liveVideo.style.display = 'none';
-    }
-
     const file = document.getElementById('videoInput').files[0] || null;
+    
+    // إخفاء فيديو التصوير المباشر عند التحويل
+    liveVideo.style.display = 'none';
+
     let text="", textEn="", textHi="", welcomeMessage="", welcomeMessageEn="", welcomeMessageHi="", bgColor="";
 
     if(file && file.name.includes("1")){
@@ -178,7 +149,8 @@ function convertVideo(){
         welcomeMessageEn="Welcome to Video 1: Abdelsalam's Message";
         welcomeMessageHi="वीडियो 1 में आपका स्वागत है: अब्देलसलाम का संदेश";
         bgColor="#1976d2"; 
-    } else if(file && file.name.includes("2")){
+    }
+    else if(file && file.name.includes("2")){
         text="السلام عليكم من فضلك أريد حجز تذكرة طيران للذهاب للسعودية يوم الأربعاء القادم على الخطوط القطرية .. شكراً لك على تعاونك";
         textEn="Hello, please I would like to book a flight ticket to Saudi Arabia next Wednesday on Qatar Airways. Thank you for your cooperation.";
         textHi="नमस्ते, कृपया मैं अगले बुधवार को कतार एयरवेज़ पर सऊदी अरब के लिए फ्लाइट टिकट बुक करना चाहता हूँ। आपके सहयोग के लिए धन्यवाद।";
@@ -186,7 +158,8 @@ function convertVideo(){
         welcomeMessageEn="Welcome to Video 2: Flight Booking Message";
         welcomeMessageHi="वीडियो 2 में आपका स्वागत है: फ्लाइट बुकिंग संदेश";
         bgColor="#43a047"; 
-    } else if(file && file.name.includes("3")){
+    }
+    else if(file && file.name.includes("3")){
         text="السلام عليكم ، من فضلك أنا اسمي حسام الدين وعندى موعد طبى اليوم مع طبيب الأسرة ، أريد رقم للدخول الى الطبيب ، شكرا لكم .";
         textEn="Hello, my name is Hossam Eldin and I have a medical appointment today with the family doctor. I need the access number to see the doctor. Thank you.";
         textHi="नमस्ते, मेरा नाम हुसाम एल्दिन है और आज मेरा परिवार के डॉक्टर के साथ चिकित्सा अपॉइंटमेंट है। मुझे डॉक्टर को देखने के लिए प्रवेश संख्या चाहिए। धन्यवाद।";
@@ -194,7 +167,8 @@ function convertVideo(){
         welcomeMessageEn="Welcome to Video 3: Medical Appointment Message";
         welcomeMessageHi="वीडियो 3 में आपका स्वागत है: मेडिकल अपॉइंटमेंट संदेश";
         bgColor="#f4511e"; 
-    } else if(file && file.name.includes("4")){
+    }
+    else if(file && file.name.includes("4")){
         text = "السلام عليكم  ، من فضلك أريد تجديد بطاقتي الشخصية وأيضا أريد تغيير الصورة بها لو سمحت ، وشكرا لك على تعاونك";
         textEn = "Hello, please I would like to renew my ID card and also change its photo if possible. Thank you for your cooperation.";
         textHi = "नमस्ते, कृपया मैं अपना पहचान पत्र नवीनीकरण करना चाहता हूँ और इसके फोटो को भी बदलना चाहता हूँ। आपके सहयोग के लिए धन्यवाद।";
@@ -202,7 +176,8 @@ function convertVideo(){
         welcomeMessageEn = "Welcome to Video 4: ID Card Renewal Message";
         welcomeMessageHi = "वीडियो 4 में आपका स्वागत है: पहचान पत्र नवीनीकरण संदेश";
         bgColor = "#8e24aa"; 
-    } else if(liveVideo.srcObject){
+    }
+    else if(videoPlayer.src && videoPlayer.src.includes("blob")){ 
         text="تم تسجيل الفيديو المباشر بنجاح.";
         textEn="Live video recorded successfully.";
         textHi="लाइव वीडियो सफलतापूर्वक रिकॉर्ड किया गया।";
@@ -210,7 +185,8 @@ function convertVideo(){
         welcomeMessageEn="Live Video";
         welcomeMessageHi="लाइव वीडियो";
         bgColor="#0288d1"; 
-    } else {
+    }
+    else{
         text = "السلام عليكم ، انا من ذوي الإعاقة السمعية وأريد مساعدتك لأنهاء مهمتي هنا ، شكرا لك على تعاونك معي .";
         textEn = "Hello, my name is hearing impaired and I need your help to complete my task here. Thank you for your cooperation.";
         textHi = "नमस्ते, मैं श्रवण बाधित हूँ और मुझे यहाँ अपना कार्य पूरा करने में आपकी मदद चाहिए। आपके सहयोग के लिए धन्यवाद।";
@@ -238,19 +214,36 @@ function convertVideo(){
     speakSequential(currentText.ar, currentText.en, currentText.hi);
 }
 
-// صوت موحد لجميع الفيديوهات
+// صوت موحد ونقي لجميع الفيديوهات والرسائل العامة
 function speakSequential(arText, enText, hiText){
     if(!arText && !enText && !hiText) return;
+
     speechSynthesis.cancel();
 
     const arUtter = new SpeechSynthesisUtterance(arText);
-    arUtter.lang = "ar-QA"; arUtter.rate = 1.0; arUtter.pitch = 1.0; arUtter.volume = 1.0;
+    arUtter.lang = "ar-QA";
+    arUtter.rate = 1.0; arUtter.pitch = 1.0; arUtter.volume = 1.0;
 
-    arUtter.onend = ()=> {
+    arUtter.onend = ()=>{
         if(enText){
             const enUtter = new SpeechSynthesisUtterance(enText);
-            enUtter.lang = "en-US"; enUtter.rate = 1.2; enUtter.pitch = 1.0; enUtter.volume = 1.0;
-            enUtter.onend = ()=> {
+            enUtter.lang = "en-US";
+            enUtter.rate = 1.2; enUtter.pitch = 1.0; enUtter.volume = 1.0;
+
+            enUtter.onend = ()=>{
                 if(hiText){
                     const hiUtter = new SpeechSynthesisUtterance(hiText);
-                    hiUtter.lang = "hi-IN"; hiUtter.rate = 1.05; hiUtter.pitch = 1.0; hiUtter.volume = 
+                    hiUtter.lang = "hi-IN";
+                    hiUtter.rate = 1.05; hiUtter.pitch = 1.0; hiUtter.volume = 1.0;
+                    speechSynthesis.speak(hiUtter);
+                }
+            }
+            speechSynthesis.speak(enUtter);
+        }
+    };
+
+    speechSynthesis.speak(arUtter);
+}
+</script>
+</body>
+</html>
