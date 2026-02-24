@@ -168,6 +168,16 @@ function convertVideo(){
         welcomeMessageHi="वीडियो 3 में आपका स्वागत है: मेडिकल अपॉइंटमेंट संदेश";
         bgColor="#f4511e"; 
     }
+    // إضافة فيديو 4
+    else if(file && file.name.includes("4")){
+        text = "السلام عليكم  ، من فضلك أريد تجديد بطاقتي الشخصية وأيضا أريد تغيير الصورة بها لو سمحت ، وشكرا لك على تعاونك";
+        textEn = "Hello, please I would like to renew my ID card and also change its photo if possible. Thank you for your cooperation.";
+        textHi = "नमस्ते, कृपया मैं अपना पहचान पत्र नवीनीकरण करना चाहता हूँ और इसके फोटो को भी बदलना चाहता हूँ। आपके सहयोग के लिए धन्यवाद।";
+        welcomeMessage = "مرحباً بكم في الفيديو الرابع: تجديد البطاقة الشخصية";
+        welcomeMessageEn = "Welcome to Video 4: ID Card Renewal Message";
+        welcomeMessageHi = "वीडियो 4 में आपका स्वागत है: पहचान पत्र नवीनीकरण संदेश";
+        bgColor = "#8e24aa"; 
+    }
     else if(videoPlayer.src && videoPlayer.src.includes("blob")){ 
         text="تم تسجيل الفيديو المباشر بنجاح.";
         textEn="Live video recorded successfully.";
@@ -209,30 +219,23 @@ function convertVideo(){
 function speakSequential(arText, enText, hiText){
     if(!arText && !enText && !hiText) return;
 
-    // إيقاف أي أصوات جارية قبل التشغيل
     speechSynthesis.cancel();
 
     const arUtter = new SpeechSynthesisUtterance(arText);
     arUtter.lang = "ar-QA";
-    arUtter.rate = 1.0;
-    arUtter.pitch = 1.0;
-    arUtter.volume = 1.0;
+    arUtter.rate = 1.0; arUtter.pitch = 1.0; arUtter.volume = 1.0;
 
     arUtter.onend = ()=>{
         if(enText){
             const enUtter = new SpeechSynthesisUtterance(enText);
             enUtter.lang = "en-US";
-            enUtter.rate = 1.2;
-            enUtter.pitch = 1.0;
-            enUtter.volume = 1.0;
+            enUtter.rate = 1.2; enUtter.pitch = 1.0; enUtter.volume = 1.0;
 
             enUtter.onend = ()=>{
                 if(hiText){
                     const hiUtter = new SpeechSynthesisUtterance(hiText);
                     hiUtter.lang = "hi-IN";
-                    hiUtter.rate = 1.05;
-                    hiUtter.pitch = 1.0;
-                    hiUtter.volume = 1.0;
+                    hiUtter.rate = 1.05; hiUtter.pitch = 1.0; hiUtter.volume = 1.0;
                     speechSynthesis.speak(hiUtter);
                 }
             }
