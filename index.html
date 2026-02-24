@@ -121,10 +121,7 @@ liveBtn.addEventListener('click', async () => {
         liveVideo.style.display = 'block';
         recordedBlobs = [];
         mediaRecorder = new MediaRecorder(stream);
-        
-        mediaRecorder.ondataavailable = event => {
-            if(event.data && event.data.size > 0) recordedBlobs.push(event.data);
-        };
+        mediaRecorder.ondataavailable = event => { if(event.data && event.data.size > 0) recordedBlobs.push(event.data); };
         mediaRecorder.start();
     } catch(err) {
         alert("تعذر الوصول للكاميرا: " + err);
@@ -145,27 +142,27 @@ function convertVideo(){
     let text="", textEn="", textHi="", welcomeMessage="", welcomeMessageEn="", welcomeMessageHi="", bgColor="", logoSrc="https://i.postimg.cc/hPmktm4Q/1.jpg";
 
     if(file && file.name.includes("1")){
-        text="السلام عليكم أنا إسمي عبد السلام الوردات ...";
-        textEn="Hello, my name is Abdelsalam Alwardat ...";
-        textHi="नमस्ते, मेरा नाम अब्देलसलाम अलवार्डट है ...";
+        text="السلام عليكم أنا إسمي عبد السلام الوردات ، معلم تربية خاصة بمجمع التربية السمعية للبنين في قطر، أهلا ومرحبا بكم ، على استعداد تام لتقديم المساعدة لكم في أي وقت ، مع السلامة.";
+        textEn="Hello, my name is Abdelsalam Alwardat, a special education teacher at the Deaf Education Complex for Boys in Qatar. Welcome, I am ready to assist you anytime. Goodbye.";
+        textHi="नमस्ते, मेरा नाम अब्देलसलाम अलवार्डट है, मैं कतर में बॉयज़ डिफ़ एजुकेशन कॉम्प्लेक्स में विशेष शिक्षा शिक्षक हूँ। स्वागत है, मैं किसी भी समय आपकी सहायता करने के लिए तैयार हूँ। अलविदा।";
         welcomeMessage="مرحباً بكم في الفيديو الأول: رسالة عبد السلام";
         welcomeMessageEn="Welcome to Video 1: Abdelsalam's Message";
         welcomeMessageHi="वीडियो 1 में आपका स्वागत है: अब्देलसलाम का संदेश";
         bgColor="#1976d2"; 
     }
     else if(file && file.name.includes("2")){
-        text="السلام عليكم من فضلك أريد حجز تذكرة طيران ...";
-        textEn="Hello, please I would like to book a flight ticket ...";
-        textHi="नमस्ते, कृपया मैं अगले बुधवार को कतार एयरवेज़ ...";
+        text="السلام عليكم من فضلك أريد حجز تذكرة طيران للذهاب للسعودية يوم الأربعاء القادم على الخطوط القطرية .. شكراً لك على تعاونك";
+        textEn="Hello, please I would like to book a flight ticket to Saudi Arabia next Wednesday on Qatar Airways. Thank you for your cooperation.";
+        textHi="नमस्ते, कृपया मैं अगले बुधवार को कतार एयरवेज़ पर सऊदी अरब के लिए फ्लाइट टिकट बुक करना चाहता हूँ। आपके सहयोग के लिए धन्यवाद।";
         welcomeMessage="مرحباً بكم في الفيديو الثاني: حجز تذكرة طيران";
         welcomeMessageEn="Welcome to Video 2: Flight Booking Message";
         welcomeMessageHi="वीडियो 2 में आपका स्वागत है: फ्लाइट बुकिंग संदेश";
         bgColor="#43a047"; 
     }
     else if(file && file.name.includes("3")){
-        text="السلام عليكم ، من فضلك أنا اسمي حسام الدين ...";
-        textEn="Hello, my name is Hossam Eldin ...";
-        textHi="नमस्ते, मेरा नाम हुसाम एल्दिन है ...";
+        text="السلام عليكم ، من فضلك أنا اسمي حسام الدين وعندى موعد طبى اليوم مع طبيب الأسرة ، أريد رقم للدخول الى الطبيب ، شكرا لكم .";
+        textEn="Hello, my name is Hossam Eldin and I have a medical appointment today with the family doctor. I need the access number to see the doctor. Thank you.";
+        textHi="नमस्ते, मेरा नाम हुसाम एल्दिन है और आज मेरा परिवार के डॉक्टर के साथ चिकित्सा अपॉइंटमेंट है। मुझे डॉक्टर को देखने के लिए प्रवेश संख्या चाहिए। धन्यवाद।";
         welcomeMessage="مرحباً بكم في الفيديو الثالث: موعد طبي";
         welcomeMessageEn="Welcome to Video 3: Medical Appointment Message";
         welcomeMessageHi="वीडियो 3 में आपका स्वागत है: मेडिकल अपॉइंटमेंट संदेश";
@@ -181,9 +178,9 @@ function convertVideo(){
         bgColor="#0288d1"; 
     }
     else{
-        text = "السلام عليكم ، انا من ذوي الإعاقة السمعية وأريد مساعدتك ...";
-        textEn = "Hello, I am hearing impaired and I need your help ...";
-        textHi = "नमस्ते, मैं श्रवण बाधित हूँ और मुझे यहाँ अपना कार्य पूरा करने में ...";
+        text = "السلام عليكم ، انا من ذوي الإعاقة السمعية وأريد مساعدتك لأنهاء مهمتي هنا ، شكرا لك على تعاونك معي .";
+        textEn = "Hello, I am hearing impaired and I need your help to complete my task here. Thank you for your cooperation.";
+        textHi = "नमस्ते, मैं श्रवण बाधित हूँ और मुझे यहाँ अपना कार्य पूरा करने में आपकी मदद चाहिए। आपके सहयोग के लिए धन्यवाद।";
         welcomeMessage = "فيديو غير معروف";
         welcomeMessageEn = "Unknown Video";
         welcomeMessageHi = "अज्ञात वीडियो";
@@ -208,6 +205,7 @@ function convertVideo(){
     speakSequential(currentText.ar, currentText.en, currentText.hi);
 }
 
+// الصوت الثلاثي محسّن وواضح
 function speakSequential(arText, enText, hiText){
     if(!arText && !enText && !hiText) return;
 
@@ -221,9 +219,9 @@ function speakSequential(arText, enText, hiText){
         if(enText){
             const enUtter = new SpeechSynthesisUtterance(enText);
             enUtter.lang = "en-US";
-            enUtter.rate = 1.1;
+            enUtter.rate = 1.2;
             enUtter.pitch = 1.0;
-            enUtter.volume = 1.0;
+            enUtter.volume = 1.2; // رفع الصوت الإنجليزي
             enUtter.onend = ()=>{
                 if(hiText){
                     const hiUtter = new SpeechSynthesisUtterance(hiText);
