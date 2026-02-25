@@ -177,14 +177,66 @@ function convertVideo(){
         welcomeMessageHi = "वीडियो 4 में आपका स्वागत है: पहचान पत्र नवीनीकरण संदेश";
         bgColor = "#8e24aa"; 
     }
-else if(file && file.name.includes("5")){
-    text = "السلام عليكم ، من فضلكم أريد سيارة إسعاف الآن بسرعة ، زوجتي مريضة جداً ولا تتحرك ، أنا في منطقة السد شارع رقم 810 ، مبنى 30 ، شقة 4 ، أرجوكم لا تتأخروا.";
+
+    if(file && file.name.includes("5")){
+        text = "السلام عليكم ، من فضلكم أريد سيارة إسعاف الآن بسرعة ، زوجتي مريضة جداً ولا تتحرك ، أنا في منطقة السد شارع رقم 810 ، مبنى 30 ، شقة 4 ، أرجوكم لا تتأخروا.";
         textEn = "Hello, please I need an ambulance immediately. My wife is very sick and cannot move. I am in Al Sadd area, Street number 810, Building 30, Apartment 4. Please do not be late.";
         textHi = "नमस्ते, कृपया मुझे तुरंत एम्बुलेंस चाहिए। मेरी पत्नी बहुत बीमार है और हिल नहीं पा रही है। मैं अल साद क्षेत्र में हूँ, सड़क संख्या 810, इमारत 30, अपार्टमेंट 4। कृपया देर न करें।";
         welcomeMessage = "مرحباً بكم في الفيديو الخامس: طلب إسعاف طارئ";
-    welcomeMessageEn = "Welcome to Video 5: Emergency Ambulance Request";
-    welcomeMessageHi = "वीडियो 5 में आपका स्वागत है: आपातकालीन एम्बुलेंस अनुरोध";
-        bgColor = "#c62828"; 
+        welcomeMessageEn = "Welcome to Video 5: Emergency Ambulance Request";
+        welcomeMessageHi = "वीडियो 5 में आपका स्वागत है: आपातकालीन एम्बुलेंस अनुरोध";
+        bgColor = "#c62828";
+    } else {
+        text = "السلام عليكم ، انا من ذوي الإعاقة السمعية وأريد مساعدتك لأنهاء مهمتي هنا ، شكرا لك على تعاونك معي .";
+        textEn = "Hello, I am hearing impaired and I need your help to complete my task here. Thank you for your cooperation.";
+        textHi = "नमस्ते, मैं श्रवण बाधित हूँ और मुझे यहाँ अपना कार्य पूरा करने में आपकी मदद चाहिए। आपके सहयोग के लिए धन्यवाद।";
+        welcomeMessage = "فيديو غير معروف";
+        welcomeMessageEn = "Unknown Video";
+        welcomeMessageHi = "अज्ञात वीडियो";
+        bgColor = "#9e9e9e";
+    }
+
+    currentText.ar = text;
+    currentText.en = textEn;
+    currentText.hi = textHi;
+
+    welcomeBox.style.display="flex";
+    welcomeBox.style.backgroundColor = bgColor;
+    welcomeText.textContent = welcomeMessage;
+    welcomeTextEn.textContent = welcomeMessageEn;
+    welcomeTextHi.textContent = welcomeMessageHi;
+
+    outputDiv.innerHTML = `<h3>الناتج:</h3>
+    <p style="font-size:18px;font-weight:bold;">${text}</p>
+    <p style="font-size:16px;color:gray;">${textEn}</p>
+    <p style="font-size:16px;color:gray;">${textHi}</p>`;
+
+    speakSequential(currentText.ar, currentText.en, currentText.hi);
+}
+
+function speakSequential(arText, enText, hiText){
+    speechSynthesis.cancel();
+
+    const arUtter = new SpeechSynthesisUtterance(arText);
+    arUtter.lang = "ar-QA";
+
+    arUtter.onend = ()=>{
+        const enUtter = new SpeechSynthesisUtterance(enText);
+        enUtter.lang = "en-US";
+        enUtter.onend = ()=>{
+            const hiUtter = new SpeechSynthesisUtterance(hiText);
+            hiUtter.lang = "hi-IN";
+            speechSynthesis.speak(hiUtter);
+        };
+        speechSynthesis.speak(enUtter);
+    };
+
+    speechSynthesis.speak(arUtter);
+}
+</script>
+</body>
+</html>
+
 }
     else{
         text = "السلام عليكم ، انا من ذوي الإعاقة السمعية وأريد مساعدتك لأنهاء مهمتي هنا ، شكرا لك على تعاونك معي .";
@@ -247,4 +299,3 @@ function speakSequential(arText, enText, hiText){
 </script>
 </body>
 </html>
-
