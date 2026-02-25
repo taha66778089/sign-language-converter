@@ -177,6 +177,19 @@ function convertVideo(){
         welcomeMessageHi = "वीडियो 4 में आपका स्वागत है: पहचान पत्र नवीनीकरण संदेश";
         bgColor = "#8e24aa"; 
     }
+else if(file && file.name.includes("5")){
+    text = "السلام عليكم ، من فضلكم أريد سيارة إسعاف الآن بسرعة ، زوجتي مريضة جداً ولا تتحرك ، أنا في منطقة السد شارع رقم 810 ، مبنى 30 ، شقة 4 ، أرجوكم لا تتأخروا.";
+    
+    textEn = "Hello, please I need an ambulance immediately. My wife is very sick and cannot move. I am in Al Sadd area, Street number 810, Building 30, Apartment 4. Please do not be late.";
+    
+    textHi = "नमस्ते, कृपया मुझे तुरंत एम्बुलेंस चाहिए। मेरी पत्नी बहुत बीमार है और हिल नहीं पा रही है। मैं अल साद क्षेत्र में हूँ, सड़क संख्या 810, इमारत 30, अपार्टमेंट 4। कृपया देर न करें।";
+    
+    welcomeMessage = "مرحباً بكم في الفيديو الخامس: طلب إسعاف طارئ";
+    welcomeMessageEn = "Welcome to Video 5: Emergency Ambulance Request";
+    welcomeMessageHi = "वीडियो 5 में आपका स्वागत है: आपातकालीन एम्बुलेंस अनुरोध";
+    
+    bgColor = "#c62828"; 
+}
     else if(videoPlayer.src && videoPlayer.src.includes("blob")){ 
         text="تم تسجيل الفيديو المباشر بنجاح.";
         textEn="Live video recorded successfully.";
